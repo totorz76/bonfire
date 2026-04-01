@@ -39,8 +39,12 @@ class SecurityController extends AbstractController
         // Crée user
         $user = new User();
         $user->setEmail($data['email']);
+        $user->setPseudo($data['pseudo'] ?? 'user_' . rand(1000, 9999)); // important
         $user->setPassword($this->hasher->hashPassword($user, $data['password']));
         $user->setRoles(['ROLE_USER']);
+        $user->setCreatedAt(new \DateTimeImmutable());
+        $user->setBio(null);
+        $user->setAvatar(null);
 
         $this->em->persist($user);
         $this->em->flush();
