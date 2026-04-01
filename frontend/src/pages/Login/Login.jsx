@@ -17,27 +17,33 @@ function Login() {
 
     const data = await res.json();
     console.log(data);
+
+    if (res.ok) {
+      alert("Connecté !");
+    } else {
+      alert(data.error || "Erreur login");
+    }
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Login</h1>
+      <h2>Login</h2>
 
       <input
         type="email"
-        placeholder="Email"
+        placeholder="email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
         type="password"
-        placeholder="Password"
+        placeholder="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button type="submit">Se connecter</button>
+      <button type="submit">Login</button>
     </form>
   );
 }

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,8 @@ class SecurityController extends AbstractController
     public function __construct(
         private UserRepository $userRepository,
         private UserPasswordHasherInterface $hasher,
-        private EntityManagerInterface $em
+        private EntityManagerInterface $em,
+        private JWTTokenManagerInterface $jwtManager
     ) {}
 
     #[Route('/register', name: 'register', methods: ['POST'])]
@@ -67,13 +69,11 @@ class SecurityController extends AbstractController
             return $this->json(['error' => 'Identifiants invalides'], 401);
         }
 
-        // ⚠️ Si tu veux JWT, il faut LexikJWTAuthenticationBundle
-        // Pour l'instant, on retourne juste l'user ID
+        // 🔥 Génération du JWT
+        $token = $this->jwtManager->create($user);
 
         return $this->json([
-            'id' => $user->getId(),
-            'email' => $user->getEmail(),
-            'message' => 'Connecté !'
+            'token' => $token
         ]);
     }
 
