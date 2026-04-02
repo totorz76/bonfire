@@ -6,7 +6,9 @@ export default function Navbar() {
   const token = localStorage.getItem("token");
 
   // Si on est sur la page de login ou de register, on ne renvoie rien
-  if (location.pathname === "/login" || location.pathname === "/register") {
+  const hiddenRoutes = ["/login", "/register"];
+
+  if (hiddenRoutes.includes(location.pathname)) {
     return null;
   }
 
