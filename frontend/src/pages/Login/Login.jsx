@@ -1,10 +1,18 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+
+    if (token) {
+      navigate("/profile");
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -25,10 +33,10 @@ function Login() {
         return;
       }
 
-      // 🔐 Stocker le token
+      // Stocker le token
       localStorage.setItem("token", data.token);
 
-      // 🔁 Redirection
+      // Redirection
       navigate("/profile");
     } catch (error) {
       console.error(error);
