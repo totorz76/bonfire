@@ -1,49 +1,60 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:8000/api/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch("http://localhost:8000/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await res.json();
-    console.log(data);
+      const data = await response.json();
 
-    if (res.ok) {
-      alert("Connecté !");
-    } else {
-      alert(data.error || "Erreur login");
+      if (!response.ok) {
+        alert(data.error || "Erreur login");
+        return;
+      }
+
+      // 🔐 Stocker le token
+      localStorage.setItem("token", data.token);
+
+      // 🔁 Redirection
+      navigate("/profile");
+    } catch (error) {
+      console.error(error);
+      alert("Erreur serveur");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleLogin}>
       <h2>Login</h2>
 
       <input
         type="email"
-        placeholder="email"
+        placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
 
       <input
         type="password"
-        placeholder="password"
+        placeholder="Mot de passe"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
 
-      <button type="submit">Login</button>
+      <button type="submit">Se connecter</button>
     </form>
   );
 }
