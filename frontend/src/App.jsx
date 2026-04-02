@@ -5,6 +5,8 @@ import Register from "./pages/Register/Register";
 import Profile from "./pages/Profile/profile";
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar/Navbar";
+import Home from "./pages/Home/Home";
+import PublicRoute from "./components/PublicRoute";
 
 function App() {
   return (
@@ -13,6 +15,14 @@ function App() {
       <Routes>
         <Route path="/" element={<Feed />} />
         <Route path="/login" element={<Login />} />
+        <Route
+          path="/home"
+          element={
+            <PublicRoute>
+              <Home />
+            </PublicRoute>
+          }
+        />
         <Route
           path="/profile"
           element={

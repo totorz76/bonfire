@@ -8,11 +8,7 @@ function Feed() {
   useEffect(() => {
     const token = localStorage.getItem("token");
 
-    fetch("http://localhost:8000/api/posts", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch("http://localhost:8000/api/posts")
       .then((res) => {
         if (!res.ok) {
           throw new Error("Erreur lors du chargement des posts");
