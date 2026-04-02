@@ -1,16 +1,23 @@
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const [user, setUser] = useState(null);
+
   const token = localStorage.getItem("token");
 
-  // Si on est sur la page de login ou de register, on ne renvoie rien
-  const hiddenRoutes = ["/login", "/register"];
+  useEffect(() => {
+    if (!token) return;
 
-  if (hiddenRoutes.includes(location.pathname)) {
-    return null;
-  }
+    fetch("http://localhost:8000/api/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setUser(data));
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -28,6 +35,7 @@ export default function Navbar() {
         </>
       ) : (
         <>
+          <span>👤 {user?.pseudo}</span>
           <Link to="/profile">Profile</Link>
           <button onClick={handleLogout}>Logout</button>
         </>

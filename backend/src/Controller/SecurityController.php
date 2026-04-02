@@ -87,7 +87,8 @@ class SecurityController extends AbstractController
         return $this->json([
             'id' => $user->getId(),
             'email' => $user->getEmail(),
-            'roles' => $user->getRoles()
+            'roles' => $user->getRoles(),
+            'pseudo' => $user->getPseudo(),
         ]);
     }
 
