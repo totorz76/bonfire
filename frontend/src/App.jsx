@@ -4,10 +4,12 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Profile from "./pages/Profile/profile";
 import PrivateRoute from "./components/PrivateRoute";
+import Navbar from "./components/Navbar/Navbar";
 
 function App() {
   return (
     <BrowserRouter>
+      <Navbar /> {/* ✅ ICI */}
       <Routes>
         <Route path="/" element={<Feed />} />
         <Route path="/login" element={<Login />} />
@@ -15,7 +17,7 @@ function App() {
           path="/profile"
           element={
             <PrivateRoute>
-              <Profile />{" "}
+              <Profile />
             </PrivateRoute>
           }
         />
