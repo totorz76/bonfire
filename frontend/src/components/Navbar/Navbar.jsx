@@ -1,8 +1,14 @@
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
 export default function Navbar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const token = localStorage.getItem("token");
+
+  // Si on est sur la page de login ou de register, on ne renvoie rien
+  if (location.pathname === "/login" || location.pathname === "/register") {
+    return null;
+  }
 
   const handleLogout = () => {
     localStorage.removeItem("token");
