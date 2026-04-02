@@ -12,7 +12,9 @@ function Home() {
       <div>
         <button onClick={() => navigate("/login")}>Se connecter</button>
 
-        <button onClick={() => navigate("/register")}>S'inscrire</button>
+        <button onClick={() => navigate("/register")}>Créer un compte</button>
+
+        <button onClick={() => navigate("/feed")}>Voir la communauté</button>
       </div>
     </div>
   );
