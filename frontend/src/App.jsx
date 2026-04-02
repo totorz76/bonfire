@@ -7,6 +7,7 @@ import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
 import PublicRoute from "./components/PublicRoute";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         />
         <Route path="/register" element={<Register />} />
       </Routes>
+      <Footer />
     </BrowserRouter>
   );
 }
