@@ -57,7 +57,10 @@ function Feed() {
             <p>{post.description}</p>
             <small>
               {post.created_at
-                ? new Date(post.created_at).toLocaleString()
+                ? new Date(post.created_at).toLocaleString("fr-FR", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                  })
                 : "Date inconnue"}
             </small>
           </div>
