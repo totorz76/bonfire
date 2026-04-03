@@ -3,6 +3,11 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Put;
+use App\Entity\Comment;
 use App\Entity\Reaction;
 use App\Entity\User;
 use App\Repository\PostRepository;
@@ -10,10 +15,27 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
+use ApiPlatform\Metadata\Post as ApiPost;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['post:read']],
-    denormalizationContext: ['groups' => ['post:write']]
+    denormalizationContext: ['groups' => ['post:write']],
+    operations: [
+        new Get(),
+        new GetCollection(),
+
+        new ApiPost(
+            security: "is_granted('ROLE_USER')"
+        ),
+
+        new Put(
+            security: "object.getUser() == user"
+        ),
+
+        new Delete(
+            security: "object.getUser() == user"
+        )
+    ]
 )]
 #[ORM\Entity(repositoryClass: PostRepository::class)]
 class Post
