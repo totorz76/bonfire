@@ -30,6 +30,7 @@ security:
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/posts, methods: GET, roles: PUBLIC_ACCESS }
+        - { path: ^/api/posts, methods: [POST], roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
 
 when@test:

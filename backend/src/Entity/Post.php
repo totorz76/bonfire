@@ -15,7 +15,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
-use ApiPlatform\Metadata\Post as ApiPost;
 
 #[ApiResource(
     normalizationContext: ['groups' => ['post:read']],
@@ -23,10 +22,6 @@ use ApiPlatform\Metadata\Post as ApiPost;
     operations: [
         new Get(),
         new GetCollection(),
-
-        new ApiPost(
-            security: "is_granted('ROLE_USER')"
-        ),
 
         new Put(
             security: "object.getUser() == user"
@@ -93,6 +88,7 @@ class Post
     {
         $this->comments = new ArrayCollection();
         $this->reactions = new ArrayCollection();
+        $this->created_at = new \DateTimeImmutable();
     }
 
     public function getId(): ?int

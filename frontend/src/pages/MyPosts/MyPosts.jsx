@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 function MyPosts() {
   const [posts, setPosts] = useState([]);
@@ -52,7 +53,9 @@ function MyPosts() {
   return (
     <div>
       <h1>Mes posts</h1>
-
+      <Link to="/createpost">
+        <button>Créer un post</button>
+      </Link>
       {myPosts.length === 0 ? (
         <p>Aucun post</p>
       ) : (
@@ -60,6 +63,14 @@ function MyPosts() {
           <div key={post.id}>
             <h2>{post.title}</h2>
             <p>{post.description}</p>
+
+            {post.image && (
+              <img
+                src={`http://localhost:8000${post.image}`}
+                alt={post.title}
+                style={{ width: "200px" }}
+              />
+            )}
 
             <button onClick={() => handleDelete(post.id)}>Supprimer</button>
           </div>

@@ -9,6 +9,7 @@ import Home from "./pages/Home/Home";
 import PublicRoute from "./components/PublicRoute";
 import Footer from "./components/Footer/Footer";
 import MyPosts from "./pages/MyPosts/MyPosts";
+import CreatePost from "./pages/CreatePost/CreatePost";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<Feed />} />
+        <Route path="/createpost" element={<CreatePost />} />
         <Route path="/myposts" element={<MyPosts />} />
         <Route path="/login" element={<Login />} />
         <Route

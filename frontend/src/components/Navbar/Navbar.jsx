@@ -47,6 +47,7 @@ export default function Navbar() {
         </>
       ) : (
         <>
+          <Link to="/myposts">My posts</Link>
           <span>👤 {user?.pseudo}</span>
           <Link to="/profile">Profile</Link>
           <button onClick={handleLogout}>Logout</button>
