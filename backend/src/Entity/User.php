@@ -59,13 +59,22 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'user')]
     private Collection $reactions;
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
+    #[ORM\JoinTable(name: 'user_follow')]
+    #[Groups(['user:read'])]
+    private Collection $following;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'following')]
+    #[Groups(['user:read'])]
+    private Collection $followers;
     public function __construct()
     {
         $this->posts = new ArrayCollection();
         $this->comments = new ArrayCollection();
         $this->reactions = new ArrayCollection();
+        $this->following = new ArrayCollection();
+        $this->followers = new ArrayCollection();
     }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -277,5 +286,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
 
         return $this;
+    }
+    public function getFollowing(): Collection
+    {
+        return $this->following;
+    }
+
+    public function getFollowers(): Collection
+    {
+        return $this->followers;
+    }
+    public function follow(User $user): static
+    {
+        // empêcher de se follow soi-même
+        if ($user === $this) {
+            return $this;
+        }
+
+        if (!$this->following->contains($user)) {
+            $this->following->add($user);
+        }
+
+        return $this;
+    }
+    public function unfollow(User $user): static
+    {
+        $this->following->removeElement($user);
+
+        return $this;
+    }
+    public function isFollowing(User $user): bool
+    {
+        return $this->following->contains($user);
     }
 }
