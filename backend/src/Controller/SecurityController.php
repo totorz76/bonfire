@@ -69,7 +69,7 @@ class SecurityController extends AbstractController
             return $this->json(['error' => 'Identifiants invalides'], 401);
         }
 
-        // 🔥 Génération du JWT
+        // Génération du JWT
         $token = $this->jwtManager->create($user);
 
         return $this->json([
@@ -84,11 +84,8 @@ class SecurityController extends AbstractController
             return $this->json(['error' => 'Non authentifié'], 401);
         }
 
-        return $this->json([
-            'id' => $user->getId(),
-            'email' => $user->getEmail(),
-            'roles' => $user->getRoles(),
-            'pseudo' => $user->getPseudo(),
+        return $this->json($user, 200, [], [
+            'groups' => ['user:read']
         ]);
     }
 
