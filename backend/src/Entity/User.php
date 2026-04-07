@@ -60,7 +60,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'user')]
     private Collection $reactions;
     #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'followers')]
-    #[ORM\JoinTable(name: 'user_follow')]
+    #[ORM\JoinTable(
+        name: 'user_follow',
+        joinColumns: [
+            new ORM\JoinColumn(name: 'follower_id', referencedColumnName: 'id', onDelete: 'CASCADE')
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(name: 'following_id', referencedColumnName: 'id', onDelete: 'CASCADE')
+        ]
+    )]
     #[Groups(['user:read'])]
     private Collection $following;
 
