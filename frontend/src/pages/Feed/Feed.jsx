@@ -120,7 +120,10 @@ function Feed() {
 
       <div className="flex justify-center items-center gap-2 mt-10 flex-wrap">
         <button
-          onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+          onClick={() => {
+            setCurrentPage((p) => Math.max(p - 1, 1));
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           className="px-3 py-1 border border-[#2A2A2A] rounded-lg hover:border-[#E25822] transition cursor-pointer"
         >
           Prev
@@ -129,7 +132,10 @@ function Feed() {
         {pages.map((page) => (
           <button
             key={page}
-            onClick={() => setCurrentPage(page)}
+            onClick={() => {
+              setCurrentPage(page);
+              window.scrollTo({ top: 0, behavior: "smooth" });
+            }}
             className={`px-3 py-1 border rounded-lg transition cursor-pointer ${
               currentPage === page
                 ? "bg-[#E25822] text-white border-[#E25822]"
@@ -141,7 +147,12 @@ function Feed() {
         ))}
 
         <button
-          onClick={() => setCurrentPage((p) => (p < totalPages ? p + 1 : p))}
+          onClick={() => {
+            setCurrentPage((p) =>
+              indexOfLastPost < filteredPosts.length ? p + 1 : p,
+            );
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
           className="px-3 py-1 border border-[#2A2A2A] rounded-lg hover:border-[#E25822] transition cursor-pointer"
         >
           Next

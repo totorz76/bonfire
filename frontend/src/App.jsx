@@ -11,11 +11,13 @@ import Footer from "./components/Footer/Footer";
 import MyPosts from "./pages/MyPosts/MyPosts";
 import CreatePost from "./pages/CreatePost/CreatePost";
 import RootRoute from "./components/RootRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 function App() {
   return (
     <div className="bg-[#0A0A0A] min-h-screen text-[#F1F1F1]">
       <BrowserRouter>
+      <ScrollToTop />
         <Navbar />
         <Routes>
           <Route path="/" element={<RootRoute />} />
