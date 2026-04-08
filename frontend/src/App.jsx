@@ -10,13 +10,14 @@ import PublicRoute from "./components/PublicRoute";
 import Footer from "./components/Footer/Footer";
 import MyPosts from "./pages/MyPosts/MyPosts";
 import CreatePost from "./pages/CreatePost/CreatePost";
+import RootRoute from "./components/RootRoute";
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Feed />} />
+        <Route path="/" element={<RootRoute />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/myposts" element={<MyPosts />} />
         <Route path="/login" element={<Login />} />
