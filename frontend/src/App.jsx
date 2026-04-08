@@ -18,6 +18,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<RootRoute />} />
+        <Route path="/feed" element={<Feed />} />
         <Route path="/createpost" element={<CreatePost />} />
         <Route path="/myposts" element={<MyPosts />} />
         <Route path="/login" element={<Login />} />
