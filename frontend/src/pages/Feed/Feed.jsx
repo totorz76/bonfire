@@ -1,15 +1,19 @@
 import { useEffect, useState } from "react";
 import PostsSlider from "./PostsSlider/PostsSlider";
+import { useNavigate } from "react-router-dom";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const [sortOrder, setSortOrder] = useState("desc");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
 
-  const postsPerPage = 6;
+  const postsPerPage = 9;
+  const navigate = useNavigate();
+  const userId = localStorage.getItem("userId"); // adapte si besoin
 
   useEffect(() => {
     fetch("http://localhost:8000/api/posts")
@@ -20,13 +24,7 @@ function Feed() {
         return res.json();
       })
       .then((data) => {
-        const posts = data?.member || [];
-
-        const sortedPosts = posts.sort((a, b) => {
-          return new Date(b.created_at) - new Date(a.created_at);
-        });
-
-        setPosts(sortedPosts);
+        setPosts(data?.member || []);
         setLoading(false);
       })
       .catch((err) => {
@@ -36,18 +34,77 @@ function Feed() {
       });
   }, []);
 
+  const handleLike = async (postId) => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+      return;
+    }
+
+    const res = await fetch(`http://localhost:8000/api/posts/${postId}/like`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = await res.json();
+
+    setPosts((prevPosts) =>
+      prevPosts.map((post) => {
+        if (post.id !== postId) return post;
+
+        let updatedReactions = [...(post.reactions || [])];
+
+        if (data.liked) {
+          updatedReactions.push({
+            user: `/api/users/${userId}`,
+          });
+        } else {
+          updatedReactions = updatedReactions.filter(
+            (r) => r.user !== `/api/users/${userId}`,
+          );
+        }
+
+        return {
+          ...post,
+          reactions: updatedReactions,
+        };
+      }),
+    );
+  };
+
+  if (loading) {
+    return <div className="text-center mt-10">Chargement...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center mt-10">{error}</div>;
+  }
+
+  const sortedPosts = [...posts].sort((a, b) =>
+    sortOrder === "desc"
+      ? new Date(b.created_at) - new Date(a.created_at)
+      : new Date(a.created_at) - new Date(b.created_at),
+  );
+
+  const filteredPosts = sortedPosts.filter((post) =>
+    post.title.toLowerCase().includes(search.toLowerCase()),
+  );
+
+  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
+  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
+
+  const indexOfLastPost = currentPage * postsPerPage;
+  const currentPosts = filteredPosts.slice(
+    indexOfLastPost - postsPerPage,
+    indexOfLastPost,
+  );
+
   const featuredPosts = [...posts]
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
     .slice(0, 5);
-
-  const filteredPosts = posts.filter((post) =>
-    post.title.toLowerCase().includes(search.toLowerCase()),
-  );
-  const totalPages = Math.ceil(filteredPosts.length / postsPerPage);
-  const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts = filteredPosts.slice(indexOfFirstPost, indexOfLastPost);
 
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-[#F1F1F1] px-6 py-6">
@@ -57,6 +114,36 @@ function Feed() {
 
       <div className="max-w-3xl mx-auto mb-10">
         <PostsSlider posts={featuredPosts} />
+      </div>
+
+      <div className="flex gap-4 mb-6 justify-center">
+        <button
+          onClick={() => {
+            setSortOrder("desc");
+            setCurrentPage(1);
+          }}
+          className={`px-4 py-2 rounded-lg border ${
+            sortOrder === "desc"
+              ? "bg-[#E25822] text-white border-[#E25822]"
+              : "border-[#2A2A2A]"
+          }`}
+        >
+          Récent
+        </button>
+
+        <button
+          onClick={() => {
+            setSortOrder("asc");
+            setCurrentPage(1);
+          }}
+          className={`px-4 py-2 rounded-lg border ${
+            sortOrder === "asc"
+              ? "bg-[#E25822] text-white border-[#E25822]"
+              : "border-[#2A2A2A]"
+          }`}
+        >
+          Ancien
+        </button>
       </div>
 
       <input
@@ -76,37 +163,53 @@ function Feed() {
             Aucun post trouvé
           </p>
         ) : (
-          currentPosts.map((post) => (
-            <div
-              key={post.id}
-              className="bg-[#121212] border border-[#2A2A2A] rounded-xl overflow-hidden hover:border-[#E25822] hover:scale-[1.02] transition duration-200"
-            >
-              {post.image && (
-                <img
-                  src={`http://localhost:8000${post.image}`}
-                  alt={post.title}
-                  className="w-full h-48 object-cover"
-                />
-              )}
+          currentPosts.map((post) => {
+            const isLiked = post.reactions?.some(
+              (reaction) => reaction.user === `/api/users/${userId}`,
+            );
 
-              <div className="p-4">
-                <h2 className="text-lg font-semibold text-[#E25822] mb-2">
-                  {post.title}
-                </h2>
+            return (
+              <div
+                key={post.id}
+                className="bg-[#121212] border border-[#2A2A2A] rounded-xl overflow-hidden hover:border-[#E25822] transition"
+              >
+                {post.image && (
+                  <img
+                    src={`http://localhost:8000${post.image}`}
+                    alt={post.title}
+                    className="w-full h-48 object-cover"
+                  />
+                )}
 
-                <p className="text-gray-300 text-sm mb-3">{post.description}</p>
+                <div className="p-4">
+                  <h2 className="text-[#E25822] font-semibold mb-2">
+                    {post.title}
+                  </h2>
 
-                <small className="text-gray-500 text-xs">
-                  {post.created_at
-                    ? new Date(post.created_at).toLocaleString("fr-FR", {
-                        dateStyle: "medium",
-                        timeStyle: "short",
-                      })
-                    : "Date inconnue"}
-                </small>
+                  <p className="text-gray-300 text-sm mb-3">
+                    {post.description}
+                  </p>
+
+                  <div className="flex items-center justify-between">
+                    <small className="text-gray-500 text-xs">
+                      {new Date(post.created_at).toLocaleString("fr-FR")}
+                    </small>
+
+                    <button
+                      onClick={() => handleLike(post.id)}
+                      className={`flex items-center gap-1 px-3 py-1 rounded-lg border transition transform ${
+                        isLiked
+                          ? "bg-[#E25822] text-white border-[#E25822] scale-105"
+                          : "border-[#2A2A2A] text-gray-300 hover:border-[#E25822]"
+                      }`}
+                    >
+                      🔥 {post.reactions?.length || 0}
+                    </button>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
 
@@ -116,7 +219,7 @@ function Feed() {
             setCurrentPage((p) => Math.max(p - 1, 1));
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="px-3 py-1 border border-[#2A2A2A] rounded-lg hover:border-[#E25822] transition cursor-pointer"
+          className="px-3 py-1 border border-[#2A2A2A] rounded-lg hover:border-[#E25822]"
         >
           Prev
         </button>
@@ -128,10 +231,10 @@ function Feed() {
               setCurrentPage(page);
               window.scrollTo({ top: 0, behavior: "smooth" });
             }}
-            className={`px-3 py-1 border rounded-lg transition cursor-pointer ${
+            className={`px-3 py-1 rounded-lg ${
               currentPage === page
-                ? "bg-[#E25822] text-white border-[#E25822]"
-                : "border-[#2A2A2A] hover:border-[#E25822] text-gray-300"
+                ? "bg-[#E25822] text-white"
+                : "border border-[#2A2A2A]"
             }`}
           >
             {page}
@@ -145,7 +248,7 @@ function Feed() {
             );
             window.scrollTo({ top: 0, behavior: "smooth" });
           }}
-          className="px-3 py-1 border border-[#2A2A2A] rounded-lg hover:border-[#E25822] transition cursor-pointer"
+          className="px-3 py-1 border border-[#2A2A2A] rounded-lg hover:border-[#E25822]"
         >
           Next
         </button>

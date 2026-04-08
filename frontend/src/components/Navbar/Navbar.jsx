@@ -53,7 +53,7 @@ export default function Navbar() {
           </Link>
 
           <Link
-            to="/"
+            to="/feed"
             className="hidden md:block hover:text-[#E25822] transition cursor-pointer"
           >
             Feed
