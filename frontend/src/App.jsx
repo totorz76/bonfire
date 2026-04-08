@@ -14,34 +14,36 @@ import RootRoute from "./components/RootRoute";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<RootRoute />} />
-        <Route path="/feed" element={<Feed />} />
-        <Route path="/createpost" element={<CreatePost />} />
-        <Route path="/myposts" element={<MyPosts />} />
-        <Route path="/login" element={<Login />} />
-        <Route
-          path="/home"
-          element={
-            <PublicRoute>
-              <Home />
-            </PublicRoute>
-          }
-        />
-        <Route
-          path="/profile"
-          element={
-            <PrivateRoute>
-              <Profile />
-            </PrivateRoute>
-          }
-        />
-        <Route path="/register" element={<Register />} />
-      </Routes>
-      <Footer />
-    </BrowserRouter>
+    <div className="bg-[#0A0A0A] min-h-screen text-[#F1F1F1]">
+      <BrowserRouter>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<RootRoute />} />
+          <Route path="/feed" element={<Feed />} />
+          <Route path="/createpost" element={<CreatePost />} />
+          <Route path="/myposts" element={<MyPosts />} />
+          <Route path="/login" element={<Login />} />
+          <Route
+            path="/home"
+            element={
+              <PublicRoute>
+                <Home />
+              </PublicRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <PrivateRoute>
+                <Profile />
+              </PrivateRoute>
+            }
+          />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+        <Footer />
+      </BrowserRouter>
+    </div>
   );
 }
 
