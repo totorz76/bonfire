@@ -20,7 +20,13 @@ function Feed() {
         return res.json();
       })
       .then((data) => {
-        setPosts(data?.member || []);
+        const posts = data?.member || [];
+
+        const sortedPosts = posts.sort((a, b) => {
+          return new Date(b.created_at) - new Date(a.created_at);
+        });
+
+        setPosts(sortedPosts);
         setLoading(false);
       })
       .catch((err) => {
@@ -29,20 +35,6 @@ function Feed() {
         setLoading(false);
       });
   }, []);
-
-  if (loading) {
-    return (
-      <div className="text-center mt-10 text-white">
-        Chargement des posts...
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center mt-10 text-red-500">Erreur : {error}</div>
-    );
-  }
 
   const featuredPosts = [...posts]
     .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
