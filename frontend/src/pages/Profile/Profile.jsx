@@ -4,7 +4,6 @@ export default function Profile() {
   const [user, setUser] = useState(null);
   const [bio, setBio] = useState("");
   const [posts, setPosts] = useState([]);
-
   const fileInputRef = useRef(null);
 
   // ---------------- FETCH USER ----------------
@@ -107,13 +106,29 @@ export default function Profile() {
 
   const level = user.level;
   const xpProgress = user.xpProgress;
+  const getTitleFromLevel = (level) => {
+    if (level >= 20) return "Légende";
+    if (level >= 15) return "Maître";
+    if (level >= 10) return "Guerrier";
+    if (level >= 5) return "Aventurier";
+    return "Débutant";
+  };
+  const getNextTitle = (level) => {
+    if (level < 5) return { title: "Aventurier", level: 5 };
+    if (level < 10) return { title: "Guerrier", level: 10 };
+    if (level < 15) return { title: "Maître", level: 15 };
+    if (level < 20) return { title: "Légende", level: 20 };
+
+    return null; // max atteint
+  };
+  const nextTitle = getNextTitle(level);
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
       {/* LEFT */}
       <div className="md:col-span-2 space-y-6">
         {/* AVATAR */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center gap-2">
           <img
             src={
               user.avatar
@@ -132,6 +147,16 @@ export default function Profile() {
             accept="image/*"
             onChange={handleFileChange}
           />
+
+          {/* PSEUDO */}
+          <h2 className="text-lg font-semibold text-[#E25822]">
+            {user.pseudo}
+          </h2>
+
+          {/* TITRE RPG */}
+          <span className="text-xs bg-[#1a1a1a] border border-[#2A2A2A] px-3 py-1 rounded-full text-gray-300">
+            {getTitleFromLevel(level)}
+          </span>
         </div>
 
         {/* XP BAR */}
@@ -156,6 +181,13 @@ export default function Profile() {
           <div>
             <span className="text-gray-400">Email:</span>
             <span className="ml-2">{user.email}</span>
+          </div>
+
+          <div>
+            <span className="text-gray-400">Titre:</span>
+            <span className="ml-2 text-[#E25822]">
+              {getTitleFromLevel(level)}
+            </span>
           </div>
         </div>
 
@@ -208,9 +240,15 @@ export default function Profile() {
 
           <p className="text-sm text-gray-400">Niveau actuel : {level}</p>
 
-          <p className="text-sm text-gray-400">
-            XP restante : {100 - xpProgress}
-          </p>
+          {nextTitle ? (
+            <p className="text-sm text-gray-400">
+              Prochain titre :{" "}
+              <span className="text-[#E25822]">{nextTitle.title}</span> (niveau{" "}
+              {nextTitle.level})
+            </p>
+          ) : (
+            <p className="text-sm text-yellow-400">🎉 Niveau max atteint</p>
+          )}
         </div>
       </div>
     </div>
