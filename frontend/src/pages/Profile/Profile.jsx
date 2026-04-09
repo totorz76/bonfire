@@ -157,11 +157,6 @@ export default function Profile() {
             <span className="text-gray-400">Email:</span>
             <span className="ml-2">{user.email}</span>
           </div>
-
-          <div>
-            <span className="text-gray-400">Rôle:</span>
-            <span className="ml-2">{user.roles?.join(", ")}</span>
-          </div>
         </div>
 
         {/* BIO */}
