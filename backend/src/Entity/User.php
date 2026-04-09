@@ -115,7 +115,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     public function getLevel(): int
     {
-        return max(1, intdiv($this->xp, 100) + 1);
+        return intdiv($this->xp, 100) + 1;
     }
 
     #[Groups(['user:read'])]
