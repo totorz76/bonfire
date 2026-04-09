@@ -3,7 +3,23 @@ import { useEffect, useState } from "react";
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [bio, setBio] = useState("");
+  const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    fetch("http://localhost:8000/api/posts")
+      .then((res) => res.json())
+      .then((data) => setPosts(data.member || []))
+      .catch((err) => console.error(err));
+  }, []);
+  const myPosts = posts.filter((post) => {
+    if (!user) return false;
+    return post.user?.["@id"] === `/api/users/${user.id}`;
+  });
+  const postCount = myPosts.length;
+  const likeCount = myPosts.reduce(
+    (total, post) => total + (post.reactions?.length || 0),
+    0,
+  );
   const handleSaveBio = async () => {
     const token = localStorage.getItem("token");
 
@@ -121,19 +137,13 @@ export default function Profile() {
       <div className="space-y-4">
         {/* Résumé */}
         <div className="bg-[#121212] border border-[#2A2A2A] p-4 rounded-xl">
-          <h2 className="text-[#E25822] font-semibold mb-3">Résumé</h2>
+          <h2 className="text-[#E25822] font-semibold mb-3">Activité</h2>
 
-          <p className="text-sm text-gray-400">
-            Posts : {user.posts?.length || 0}
-          </p>
+          <p className="text-sm text-gray-400">Posts : {postCount}</p>
 
-          <p className="text-sm text-gray-400">
-            Likes donnés : {user.reactions?.length || 0}
-          </p>
+          <p className="text-sm text-gray-400">Likes reçus : {likeCount}</p>
 
-          <p className="text-sm text-gray-400">
-            Commentaires : {user.comments?.length || 0}
-          </p>
+          <p className="text-sm text-gray-400">Commentaires : 0 (bientôt)</p>
         </div>
 
         {/* Réseau */}
