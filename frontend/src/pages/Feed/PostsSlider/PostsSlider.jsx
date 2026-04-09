@@ -17,7 +17,7 @@ function PostsSlider({ posts }) {
       >
         {posts.map((post) => (
           <SwiperSlide key={post.id}>
-            <div className="bg-[#121212] border border-[#2A2A2A] p-6 rounded-xl text-center">
+            <div className="bg-[#121212] border border-[#2A2A2A] p-6 rounded-xl text-center max-w-3xl mx-auto mb-10 px-8">
               {post.image && (
                 <img
                   src={`http://localhost:8000${post.image}`}
