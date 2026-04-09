@@ -1,45 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 export default function Profile() {
   const [user, setUser] = useState(null);
   const [bio, setBio] = useState("");
   const [posts, setPosts] = useState([]);
 
-  useEffect(() => {
-    fetch("http://localhost:8000/api/posts")
-      .then((res) => res.json())
-      .then((data) => setPosts(data.member || []))
-      .catch((err) => console.error(err));
-  }, []);
-  const myPosts = posts.filter((post) => {
-    if (!user) return false;
-    return post.user?.["@id"] === `/api/users/${user.id}`;
-  });
-  const postCount = myPosts.length;
-  const likeCount = myPosts.reduce(
-    (total, post) => total + (post.reactions?.length || 0),
-    0,
-  );
-  const handleSaveBio = async () => {
-    const token = localStorage.getItem("token");
+  const fileInputRef = useRef(null);
 
-    try {
-      await fetch("http://localhost:8000/api/me", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          bio: bio,
-        }),
-      });
-
-      fetchUser(); // refresh
-    } catch (error) {
-      console.error(error);
-    }
-  };
+  // ---------------- FETCH USER ----------------
   const fetchUser = () => {
     const token = localStorage.getItem("token");
 
@@ -65,6 +33,76 @@ export default function Profile() {
     return () => window.removeEventListener("focus", handleFocus);
   }, []);
 
+  // ---------------- FETCH POSTS ----------------
+  useEffect(() => {
+    fetch("http://localhost:8000/api/posts")
+      .then((res) => res.json())
+      .then((data) => setPosts(data.member || []))
+      .catch((err) => console.error(err));
+  }, []);
+
+  // ---------------- FILTER USER POSTS ----------------
+  const myPosts = posts.filter((post) => {
+    if (!user) return false;
+    return post.user?.["@id"] === `/api/users/${user.id}`;
+  });
+
+  const postCount = myPosts.length;
+
+  const likeCount = myPosts.reduce(
+    (total, post) => total + (post.reactions?.length || 0),
+    0,
+  );
+
+  // ---------------- BIO SAVE ----------------
+  const handleSaveBio = async () => {
+    const token = localStorage.getItem("token");
+
+    try {
+      await fetch("http://localhost:8000/api/me", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ bio }),
+      });
+
+      fetchUser();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // ---------------- AVATAR ----------------
+  const handleImageClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const handleFileChange = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const token = localStorage.getItem("token");
+
+    const formData = new FormData();
+    formData.append("avatar", file);
+
+    try {
+      await fetch("http://localhost:8000/api/me/avatar", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      });
+
+      fetchUser(); // refresh user
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   if (!user) return <div className="text-white">Chargement...</div>;
 
   const level = user.level;
@@ -74,17 +112,29 @@ export default function Profile() {
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
       {/* LEFT */}
       <div className="md:col-span-2 space-y-6">
-        {/* Avatar */}
+        {/* AVATAR */}
         <div className="flex flex-col items-center">
           <img
-            src={`http://localhost:8000${user.avatar}`}
+            src={
+              user.avatar
+                ? `http://localhost:8000${user.avatar}`
+                : "http://localhost:8000/uploads/default-avatar.png"
+            }
             alt="avatar"
-            className="w-24 h-24 rounded-full object-cover border border-[#2A2A2A]"
+            onClick={handleImageClick}
+            className="w-24 h-24 rounded-full object-cover border border-[#2A2A2A] cursor-pointer hover:opacity-80 transition"
           />
-          <input type="file" className="mt-3 text-sm" />
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            className="hidden"
+            accept="image/*"
+            onChange={handleFileChange}
+          />
         </div>
 
-        {/* XP */}
+        {/* XP BAR */}
         <div>
           <div className="w-full bg-[#2A2A2A] rounded-full h-3">
             <div
@@ -101,7 +151,7 @@ export default function Profile() {
           <p className="text-xs text-gray-500 mt-1">{xpProgress} / 100 XP</p>
         </div>
 
-        {/* Infos */}
+        {/* INFOS */}
         <div className="space-y-2 text-sm">
           <div>
             <span className="text-gray-400">Email:</span>
@@ -114,7 +164,7 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Bio */}
+        {/* BIO */}
         <div>
           <textarea
             value={bio}
@@ -135,18 +185,16 @@ export default function Profile() {
 
       {/* RIGHT */}
       <div className="space-y-4">
-        {/* Résumé */}
+        {/* ACTIVITÉ */}
         <div className="bg-[#121212] border border-[#2A2A2A] p-4 rounded-xl">
           <h2 className="text-[#E25822] font-semibold mb-3">Activité</h2>
 
           <p className="text-sm text-gray-400">Posts : {postCount}</p>
-
           <p className="text-sm text-gray-400">Likes reçus : {likeCount}</p>
-
           <p className="text-sm text-gray-400">Commentaires : 0 (bientôt)</p>
         </div>
 
-        {/* Réseau */}
+        {/* COMMUNAUTÉ */}
         <div className="bg-[#121212] border border-[#2A2A2A] p-4 rounded-xl">
           <h2 className="text-[#E25822] font-semibold mb-3">Communauté</h2>
 
@@ -159,7 +207,7 @@ export default function Profile() {
           </p>
         </div>
 
-        {/* Niveau */}
+        {/* PROGRESSION */}
         <div className="bg-[#121212] border border-[#2A2A2A] p-4 rounded-xl">
           <h2 className="text-[#E25822] font-semibold mb-3">Progression</h2>
 
