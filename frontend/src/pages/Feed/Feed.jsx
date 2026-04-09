@@ -6,15 +6,20 @@ function Feed() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
   const [sortOrder, setSortOrder] = useState("desc");
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-
+  const [expandedPosts, setExpandedPosts] = useState({});
   const postsPerPage = 9;
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
 
+  const toggleDescription = (postId) => {
+    setExpandedPosts((prev) => ({
+      ...prev,
+      [postId]: !prev[postId],
+    }));
+  };
   const fetchPosts = async () => {
     try {
       const res = await fetch("http://localhost:8000/api/posts");
@@ -186,9 +191,24 @@ function Feed() {
                     {post.title}
                   </h2>
 
-                  <p className="text-gray-300 text-sm mb-3">
+                  <p
+                    className={`text-gray-300 text-sm mb-3 ${
+                      expandedPosts[post.id]
+                        ? "whitespace-normal break-words"
+                        : "line-clamp-3"
+                    }`}
+                  >
                     {post.description}
                   </p>
+
+                  {post.description.length > 50 && (
+                    <button
+                      onClick={() => toggleDescription(post.id)}
+                      className="text-xs text-[#E25822] hover:underline mb-3"
+                    >
+                      {expandedPosts[post.id] ? "Voir moins" : "Voir la suite"}
+                    </button>
+                  )}
                   <div className="text-sm text-gray-500 mb-2">
                     {post.user?.pseudo}
                   </div>
