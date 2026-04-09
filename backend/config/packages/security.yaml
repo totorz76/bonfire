@@ -17,16 +17,25 @@ security:
             pattern: ^/(_profiler|_wdt|assets|build)/
             security: false
 
+        api_options:
+            pattern: ^/api
+            methods: [OPTIONS]
+            security: false
+
         main:
             pattern: ^/api
             stateless: true
             lazy: true
             provider: app_user_provider
             jwt: ~
+            methods: [GET, POST, PUT, PATCH, DELETE]
+
+
 
 
 
     access_control:
+        - { path: ^/api, methods: [OPTIONS], roles: PUBLIC_ACCESS }
         - { path: ^/api/login, roles: PUBLIC_ACCESS }
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/posts, methods: GET, roles: PUBLIC_ACCESS }
