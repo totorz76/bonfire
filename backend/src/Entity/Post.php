@@ -67,7 +67,7 @@ class Post
     private Collection $comments;
 
     #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'post')]
-    #[Groups(['post:read'])] // 🔥 IMPORTANT
+    #[Groups(['post:read'])]
     private Collection $reactions;
 
     public function __construct()

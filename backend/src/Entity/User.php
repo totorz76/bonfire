@@ -37,7 +37,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $password = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'post:read'])]
     private ?string $pseudo = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -45,7 +45,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $bio = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['user:read', 'user:write'])]
+    #[Groups(['user:read', 'user:write', 'post:read'])]
     private ?string $avatar = null;
 
     #[ORM\Column]
@@ -53,7 +53,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\Column]
-    #[Groups(['user:read'])]
+    #[Groups(['user:read', 'post:read'])]
     private int $xp = 0;
 
     #[ORM\OneToMany(targetEntity: Post::class, mappedBy: 'user')]
@@ -81,6 +81,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'following')]
     #[Groups(['user:read'])]
     private Collection $followers;
+
 
     public function __construct()
     {

@@ -189,7 +189,9 @@ function Feed() {
                   <p className="text-gray-300 text-sm mb-3">
                     {post.description}
                   </p>
-
+                  <div className="text-sm text-gray-500 mb-2">
+                    {post.user?.pseudo}
+                  </div>
                   <div className="flex items-center justify-between">
                     <small className="text-gray-500 text-xs">
                       {new Date(post.created_at).toLocaleString("fr-FR")}
