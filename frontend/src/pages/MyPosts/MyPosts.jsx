@@ -47,7 +47,7 @@ function MyPosts() {
 
   // Filtrer les posts de l'utilisateur
   const myPosts = user
-    ? posts.filter((post) => post.user === `/api/users/${user.id}`)
+    ? posts.filter((post) => post.user?.["@id"] === `/api/users/${user.id}`)
     : [];
 
   return (
