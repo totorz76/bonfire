@@ -52,7 +52,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[Groups(['user:read'])]
     private ?\DateTimeImmutable $created_at = null;
 
-    // ✅ XP stockée en base
     #[ORM\Column]
     #[Groups(['user:read'])]
     private int $xp = 0;

@@ -13,11 +13,19 @@ use Symfony\Component\Routing\Attribute\Route;
 final class LikeController extends AbstractController
 {
     #[Route('/api/posts/{id}/like', methods: ['POST'])]
-    public function like(Post $post, EntityManagerInterface $em, Security $security): JsonResponse
-    {
+    public function like(
+        Post $post,
+        EntityManagerInterface $em,
+        Security $security
+    ): JsonResponse {
         $user = $security->getUser();
 
+        if (!$user) {
+            return new JsonResponse(['error' => 'Unauthorized'], 401);
+        }
+
         $reactionRepo = $em->getRepository(Reaction::class);
+
         $existing = $reactionRepo->findOneBy([
             'user' => $user,
             'post' => $post
@@ -27,7 +35,9 @@ final class LikeController extends AbstractController
             $em->remove($existing);
             $em->flush();
 
-            return new JsonResponse(['liked' => false]);
+            return new JsonResponse([
+                'liked' => false
+            ]);
         }
 
         $reaction = new Reaction();
@@ -35,9 +45,17 @@ final class LikeController extends AbstractController
         $reaction->setPost($post);
         $reaction->setCreatedAt(new \DateTimeImmutable());
 
-        $em->persist($reaction);
-        $em->flush();
+        try {
+            $em->persist($reaction);
+            $em->flush();
+        } catch (\Exception $e) {
+            return new JsonResponse([
+                'error' => 'Already liked'
+            ], 400);
+        }
 
-        return new JsonResponse(['liked' => true]);
+        return new JsonResponse([
+            'liked' => true
+        ]);
     }
 }

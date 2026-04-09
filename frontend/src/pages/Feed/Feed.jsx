@@ -13,25 +13,26 @@ function Feed() {
 
   const postsPerPage = 9;
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId"); // adapte si besoin
+  const userId = localStorage.getItem("userId");
+
+  const fetchPosts = async () => {
+    try {
+      const res = await fetch("http://localhost:8000/api/posts");
+      if (!res.ok) {
+        throw new Error("Erreur lors du chargement des posts");
+      }
+      const data = await res.json();
+      setPosts(data?.member || []);
+    } catch (err) {
+      console.error(err);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    fetch("http://localhost:8000/api/posts")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Erreur lors du chargement des posts");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setPosts(data?.member || []);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.error(err);
-        setError(err.message);
-        setLoading(false);
-      });
+    fetchPosts();
   }, []);
 
   const handleLike = async (postId) => {
@@ -42,37 +43,30 @@ function Feed() {
       return;
     }
 
-    const res = await fetch(`http://localhost:8000/api/posts/${postId}/like`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    try {
+      const res = await fetch(
+        `http://localhost:8000/api/posts/${postId}/like`,
+        {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
 
-    const data = await res.json();
+      if (!res.ok) return;
 
-    setPosts((prevPosts) =>
-      prevPosts.map((post) => {
-        if (post.id !== postId) return post;
+      const updatedPostRes = await fetch(
+        `http://localhost:8000/api/posts/${postId}`,
+      );
+      const updatedPost = await updatedPostRes.json();
 
-        let updatedReactions = [...(post.reactions || [])];
-
-        if (data.liked) {
-          updatedReactions.push({
-            user: `/api/users/${userId}`,
-          });
-        } else {
-          updatedReactions = updatedReactions.filter(
-            (r) => r.user !== `/api/users/${userId}`,
-          );
-        }
-
-        return {
-          ...post,
-          reactions: updatedReactions,
-        };
-      }),
-    );
+      setPosts((prevPosts) =>
+        prevPosts.map((post) => (post.id === postId ? updatedPost : post)),
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   if (loading) {
@@ -164,9 +158,15 @@ function Feed() {
           </p>
         ) : (
           currentPosts.map((post) => {
-            const isLiked = post.reactions?.some(
-              (reaction) => reaction.user === `/api/users/${userId}`,
-            );
+            const isLiked = post.reactions?.some((reaction) => {
+              if (typeof reaction.user === "string") {
+                return reaction.user === `/api/users/${userId}`;
+              }
+              if (typeof reaction.user === "object") {
+                return reaction.user.id === Number(userId);
+              }
+              return false;
+            });
 
             return (
               <div
@@ -197,13 +197,18 @@ function Feed() {
 
                     <button
                       onClick={() => handleLike(post.id)}
-                      className={`flex items-center gap-1 px-3 py-1 rounded-lg border transition transform ${
+                      className={`flex items-center gap-2 px-3 py-1 rounded-lg border transition-all duration-200 cursor-pointer ${
                         isLiked
                           ? "bg-[#E25822] text-white border-[#E25822] scale-105"
-                          : "border-[#2A2A2A] text-gray-300 hover:border-[#E25822]"
+                          : "bg-transparent text-gray-400 border-[#2A2A2A] hover:border-[#E25822] hover:text-white"
                       }`}
                     >
-                      🔥 {post.reactions?.length || 0}
+                      <span
+                        className={`${isLiked ? "text-white" : "text-gray-400"}`}
+                      >
+                        🔥
+                      </span>
+                      {post.reactions?.length || 0}
                     </button>
                   </div>
                 </div>

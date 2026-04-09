@@ -53,14 +53,6 @@ class Post
     #[Groups(['post:read', 'post:write'])]
     private ?string $image = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post:read', 'post:write'])]
-    private ?string $video = null;
-
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['post:read', 'post:write'])]
-    private ?string $gif = null;
-
     #[ORM\Column]
     #[Groups(['post:read'])]
     private ?\DateTimeImmutable $created_at = null;
@@ -70,18 +62,12 @@ class Post
     #[Groups(['post:read'])]
     private ?User $user = null;
 
-    /**
-     * @var Collection<int, Comment>
-     */
     #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
     #[Groups(['post:read'])]
     private Collection $comments;
 
-    /**
-     * @var Collection<int, Reaction>
-     */
     #[ORM\OneToMany(targetEntity: Reaction::class, mappedBy: 'post')]
-    #[Groups(['post:read'])]
+    #[Groups(['post:read'])] // 🔥 IMPORTANT
     private Collection $reactions;
 
     public function __construct()
@@ -129,28 +115,6 @@ class Post
         return $this;
     }
 
-    public function getVideo(): ?string
-    {
-        return $this->video;
-    }
-
-    public function setVideo(?string $video): static
-    {
-        $this->video = $video;
-        return $this;
-    }
-
-    public function getGif(): ?string
-    {
-        return $this->gif;
-    }
-
-    public function setGif(?string $gif): static
-    {
-        $this->gif = $gif;
-        return $this;
-    }
-
     public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->created_at;
@@ -178,46 +142,8 @@ class Post
         return $this->comments;
     }
 
-    public function addComment(Comment $comment): static
-    {
-        if (!$this->comments->contains($comment)) {
-            $this->comments->add($comment);
-            $comment->setPost($this);
-        }
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): static
-    {
-        if ($this->comments->removeElement($comment)) {
-            if ($comment->getPost() === $this) {
-                $comment->setPost(null);
-            }
-        }
-        return $this;
-    }
-
     public function getReactions(): Collection
     {
         return $this->reactions;
-    }
-
-    public function addReaction(Reaction $reaction): static
-    {
-        if (!$this->reactions->contains($reaction)) {
-            $this->reactions->add($reaction);
-            $reaction->setPost($this);
-        }
-        return $this;
-    }
-
-    public function removeReaction(Reaction $reaction): static
-    {
-        if ($this->reactions->removeElement($reaction)) {
-            if ($reaction->getPost() === $this) {
-                $reaction->setPost(null);
-            }
-        }
-        return $this;
     }
 }
