@@ -121,7 +121,7 @@ function Feed() {
             setSortOrder("desc");
             setCurrentPage(1);
           }}
-          className={`px-4 py-2 rounded-lg border ${
+          className={`px-4 py-2 rounded-lg border cursor-pointer hover:bg-[#0a0a0a] ${
             sortOrder === "desc"
               ? "bg-[#E25822] text-white border-[#E25822]"
               : "border-[#2A2A2A]"
@@ -135,7 +135,7 @@ function Feed() {
             setSortOrder("asc");
             setCurrentPage(1);
           }}
-          className={`px-4 py-2 rounded-lg border ${
+          className={`px-4 py-2 rounded-lg border cursor-pointer hover:bg-[#E25822] ${
             sortOrder === "asc"
               ? "bg-[#E25822] text-white border-[#E25822]"
               : "border-[#2A2A2A]"

@@ -203,7 +203,7 @@ export default function Profile() {
 
           <button
             onClick={handleSaveBio}
-            className="mt-2 px-4 py-2 bg-[#E25822] rounded-lg text-white text-sm"
+            className="mt-2 px-4 py-2 bg-[#E25822] rounded-lg text-white text-sm hover:opacity-90 transition cursor-pointer"
           >
             Sauvegarder
           </button>
