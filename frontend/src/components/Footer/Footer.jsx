@@ -1,18 +1,27 @@
 function Footer() {
   return (
-    <footer
-      style={{
-        marginTop: "50px",
-        padding: "20px",
-        borderTop: "1px solid #ccc",
-      }}
-    >
-      <p>© 2026 MonSite</p>
+    <footer className="mt-10 border-t border-[#2A2A2A] bg-[#0F0F0F] text-gray-400">
+      <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* LEFT */}
+        <p className="text-sm">© 2026 MonSite</p>
 
-      <div>
-        <a href="/cgu">CGU</a> |{" "}
-        <a href="/mentions-legales">Mentions légales</a> |{" "}
-        <a href="/contact">Contact</a>
+        {/* RIGHT LINKS */}
+        <div className="flex gap-4 text-sm">
+          <a href="/cgu" className="hover:text-[#E25822] transition">
+            CGU
+          </a>
+
+          <a
+            href="/mentions-legales"
+            className="hover:text-[#E25822] transition"
+          >
+            Mentions légales
+          </a>
+
+          <a href="/contact" className="hover:text-[#E25822] transition">
+            Contact
+          </a>
+        </div>
       </div>
     </footer>
   );

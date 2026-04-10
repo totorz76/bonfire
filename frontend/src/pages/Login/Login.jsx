@@ -70,7 +70,7 @@ function Login() {
 
         <button
           type="submit"
-          className="w-full py-2 bg-[#E25822] text-white rounded-lg font-semibold hover:opacity-90 transition"
+          className="w-full py-2 bg-[#E25822] text-white rounded-lg font-semibold hover:opacity-90 transition cursor-pointer"
         >
           Se connecter
         </button>
