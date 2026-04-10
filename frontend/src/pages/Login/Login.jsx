@@ -45,25 +45,56 @@ function Login() {
   };
 
   return (
-    <form onSubmit={handleLogin}>
-      <h2>Login</h2>
+    <div className="min-h-screen flex items-center justify-center bg-[#0F0F0F] px-4">
+      <form
+        onSubmit={handleLogin}
+        className="w-full max-w-sm bg-[#121212] border border-[#2A2A2A] rounded-xl p-6 flex flex-col gap-4 shadow-lg"
+      >
+        <h2 className="text-2xl font-bold text-center text-[#E25822]">Login</h2>
 
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] text-white focus:outline-none focus:border-[#E25822]"
+        />
 
-      <input
-        type="password"
-        placeholder="Mot de passe"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
+        <input
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full px-3 py-2 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] text-white focus:outline-none focus:border-[#E25822]"
+        />
 
-      <button type="submit">Se connecter</button>
-    </form>
+        <button
+          type="submit"
+          className="w-full py-2 bg-[#E25822] text-white rounded-lg font-semibold hover:opacity-90 transition"
+        >
+          Se connecter
+        </button>
+
+        {/* LINKS */}
+        <div className="flex flex-col gap-2 text-sm text-gray-400 mt-2">
+          {/* forgot password */}
+          <a href="#" className="text-center hover:text-[#E25822] transition">
+            Mot de passe oublié ?
+          </a>
+
+          {/* register */}
+          <div className="text-center">
+            Pas de compte ?{" "}
+            <span
+              onClick={() => navigate("/register")}
+              className="text-[#E25822] cursor-pointer hover:underline"
+            >
+              S'inscrire
+            </span>
+          </div>
+        </div>
+      </form>
+    </div>
   );
 }
 
