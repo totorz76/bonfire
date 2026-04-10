@@ -1,10 +1,19 @@
-.swiper-button-next,
-.swiper-button-prev {
-  color: #e25822;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 10px;
-  border-radius: 9999px;
+.swiper-button-prev,
+.swiper-button-next {
+  color: #e25822 !important;
+  width: 30px;
+  height: 30px;
 }
 
+.swiper-button-prev {
+  left: 0 !important;
+}
 
+.swiper-button-next {
+  right: 0 !important;
+}
+
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  font-size: 18px !important;
+}

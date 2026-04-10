@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import PostsSlider from "./PostsSlider/PostsSlider";
 import { useNavigate } from "react-router-dom";
+import PostsModal from "./PostsModal/PostsModal";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -13,7 +14,18 @@ function Feed() {
   const postsPerPage = 9;
   const navigate = useNavigate();
   const userId = localStorage.getItem("userId");
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const closeModal = () => {
+    setSelectedPost(null);
+    setIsModalOpen(false);
+  };
+
+  const openPost = (post) => {
+    setSelectedPost(post);
+    setIsModalOpen(true);
+  };
   const toggleDescription = (postId) => {
     setExpandedPosts((prev) => ({
       ...prev,
@@ -209,29 +221,45 @@ function Feed() {
                       {expandedPosts[post.id] ? "Voir moins" : "Voir la suite"}
                     </button>
                   )}
+
                   <div className="text-sm text-gray-500 mb-2">
                     {post.user?.pseudo}
                   </div>
-                  <div className="flex items-center justify-between">
+
+                  {/* 🔥 NOUVEAU LAYOUT PROPRE */}
+                  <div className="flex flex-col gap-3">
+                    {/* DATE EN HAUT */}
                     <small className="text-gray-500 text-xs">
                       {new Date(post.created_at).toLocaleString("fr-FR")}
                     </small>
 
-                    <button
-                      onClick={() => handleLike(post.id)}
-                      className={`flex items-center gap-2 px-3 py-1 rounded-lg border transition-all duration-200 cursor-pointer ${
-                        isLiked
-                          ? "bg-[#E25822] text-white border-[#E25822] scale-105"
-                          : "bg-transparent text-gray-400 border-[#2A2A2A] hover:border-[#E25822] hover:text-white"
-                      }`}
-                    >
-                      <span
-                        className={`${isLiked ? "text-white" : "text-gray-400"}`}
+                    {/* ACTIONS EN BAS */}
+                    <div className="flex items-center justify-between">
+                      {/* LIKE */}
+                      <button
+                        onClick={() => handleLike(post.id)}
+                        className={`flex items-center gap-2 px-3 py-1 rounded-lg border transition-all duration-200 cursor-pointer ${
+                          isLiked
+                            ? "bg-[#E25822] text-white border-[#E25822] scale-105"
+                            : "bg-transparent text-gray-400 border-[#2A2A2A] hover:border-[#E25822] hover:text-white"
+                        }`}
                       >
-                        🔥
-                      </span>
-                      {post.reactions?.length || 0}
-                    </button>
+                        <span
+                          className={`${isLiked ? "text-white" : "text-gray-400"}`}
+                        >
+                          🔥
+                        </span>
+                        {post.reactions?.length || 0}
+                      </button>
+
+                      {/* BUTTON MODAL */}
+                      <button
+                        onClick={() => openPost(post)}
+                        className="px-3 py-1 text-sm border border-[#E25822] text-[#E25822] rounded-lg hover:bg-[#E25822] hover:text-white transition cursor-pointer"
+                      >
+                        Voir le post
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -279,6 +307,7 @@ function Feed() {
         >
           Next
         </button>
+        <PostsModal post={selectedPost} onClose={closeModal} />
       </div>
     </div>
   );
