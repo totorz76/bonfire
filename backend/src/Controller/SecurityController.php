@@ -28,21 +28,42 @@ class SecurityController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        // Validation
-        if (!isset($data['email'], $data['password'])) {
-            return $this->json(['error' => 'Email et password requis'], 400);
+        // Champs requis
+        if (!isset($data['email'], $data['password'], $data['pseudo'])) {
+            return $this->json(['error' => 'Tous les champs sont requis'], 400);
         }
 
-        // Check si user existe
-        if ($this->userRepository->findOneBy(['email' => $data['email']])) {
+        $email = $data['email'];
+        $password = $data['password'];
+        $pseudo = $data['pseudo'];
+
+        // Email valide
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->json(['error' => 'Email invalide'], 400);
+        }
+
+        // Pseudo déjà utilisé
+        if ($this->userRepository->findOneBy(['pseudo' => $pseudo])) {
+            return $this->json(['error' => 'Pseudo déjà utilisé'], 409);
+        }
+
+        // Password sécurisé
+        if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{10,}$/', $password)) {
+            return $this->json([
+                'error' => 'Mot de passe trop faible (10 caractères, 1 majuscule, 1 chiffre)'
+            ], 400);
+        }
+
+        // Email déjà utilisé
+        if ($this->userRepository->findOneBy(['email' => $email])) {
             return $this->json(['error' => 'Email déjà utilisé'], 409);
         }
 
-        // Crée user
+        // Création user
         $user = new User();
-        $user->setEmail($data['email']);
-        $user->setPseudo($data['pseudo'] ?? 'user_' . rand(1000, 9999)); // important
-        $user->setPassword($this->hasher->hashPassword($user, $data['password']));
+        $user->setEmail($email);
+        $user->setPseudo($pseudo);
+        $user->setPassword($this->hasher->hashPassword($user, $password));
         $user->setRoles(['ROLE_USER']);
         $user->setCreatedAt(new \DateTimeImmutable());
         $user->setBio(null);
