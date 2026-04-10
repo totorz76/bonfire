@@ -5,7 +5,6 @@ function PostsModal({ post, onClose }) {
   const [comments, setComments] = useState([]);
   const [loading, setLoading] = useState(false);
 
-  // 🔄 Charger les commentaires
   const fetchComments = async () => {
     if (!post) return;
 
@@ -21,26 +20,19 @@ function PostsModal({ post, onClose }) {
     }
   };
 
-  // 🔁 Recharge quand post change
   useEffect(() => {
     if (!post) return;
     setNewComment("");
     fetchComments();
   }, [post]);
 
-  // 📩 Envoyer commentaire
   const handleComment = async () => {
     try {
       const content = newComment.trim();
-
       if (!content || !post) return;
 
       const token = localStorage.getItem("token");
-
-      if (!token) {
-        console.error("Pas de token !");
-        return;
-      }
+      if (!token) return;
 
       setLoading(true);
 
@@ -57,8 +49,7 @@ function PostsModal({ post, onClose }) {
       });
 
       if (!res.ok) {
-        const errorText = await res.text();
-        throw new Error(errorText || "Erreur lors de l'envoi");
+        throw new Error(await res.text());
       }
 
       setNewComment("");
@@ -74,33 +65,38 @@ function PostsModal({ post, onClose }) {
 
   return (
     <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50">
-      <div className="bg-[#121212] w-full max-w-2xl p-6 rounded-xl border border-[#2A2A2A] relative">
-        {/* Close */}
-        <button onClick={onClose} className="absolute top-3 right-3 text-white">
+      <div className="bg-[#121212] w-full max-w-2xl h-[85vh] rounded-xl border border-[#2A2A2A] relative flex flex-col overflow-hidden">
+        {/* CLOSE */}
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-white z-10"
+        >
           ✕
         </button>
 
-        {/* Image */}
-        {post.image && (
-          <img
-            src={`http://localhost:8000${post.image}`}
-            className="w-full h-64 object-cover rounded-lg mb-4"
-            alt=""
-          />
-        )}
+        {/* TOP (POST FIXE) */}
+        <div className="flex-shrink-0 p-6 pb-3">
+          {post.image && (
+            <img
+              src={`http://localhost:8000${post.image}`}
+              className="w-full h-56 object-cover rounded-lg mb-4"
+              alt=""
+            />
+          )}
 
-        {/* Title */}
-        <h2 className="text-xl font-bold text-[#E25822] mb-2">{post.title}</h2>
+          <h2 className="text-xl font-bold text-[#E25822] mb-2">
+            {post.title}
+          </h2>
 
-        {/* Description */}
-        <p className="text-gray-300 mb-4">{post.description}</p>
+          <p className="text-gray-300 mb-2">{post.description}</p>
 
-        <div className="text-sm text-gray-500 mb-6">{post.user?.pseudo}</div>
+          <div className="text-sm text-gray-500">{post.user?.pseudo}</div>
+        </div>
 
-        {/* Comments section */}
-        <div className="border-t border-[#2A2A2A] pt-4">
-          {/* Input */}
-          <div className="flex gap-2 mb-4">
+        {/* COMMENTS AREA (FULL CONTROL HEIGHT) */}
+        <div className="flex flex-col flex-1 border-t border-[#2A2A2A] overflow-hidden">
+          {/* INPUT FIXE */}
+          <div className="flex gap-2 p-4 flex-shrink-0">
             <input
               type="text"
               value={newComment}
@@ -118,8 +114,8 @@ function PostsModal({ post, onClose }) {
             </button>
           </div>
 
-          {/* List */}
-          <div className="space-y-3 max-h-60 overflow-y-auto">
+          {/* SCROLL ZONE */}
+          <div className="flex-1 overflow-y-auto px-4 pb-4 space-y-3">
             {comments.length === 0 ? (
               <p className="text-gray-500 text-sm">Aucun commentaire</p>
             ) : (
