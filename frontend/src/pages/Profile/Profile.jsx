@@ -53,6 +53,11 @@ export default function Profile() {
     0,
   );
 
+  const commentCount = myPosts.reduce(
+    (total, post) => total + (post.comments?.length || 0),
+    0,
+  );
+
   // ---------------- BIO SAVE ----------------
   const handleSaveBio = async () => {
     const token = localStorage.getItem("token");
@@ -218,7 +223,7 @@ export default function Profile() {
 
           <p className="text-sm text-gray-400">Posts : {postCount}</p>
           <p className="text-sm text-gray-400">Likes reçus : {likeCount}</p>
-          <p className="text-sm text-gray-400">Commentaires : 0 (bientôt)</p>
+          <p className="text-sm text-gray-400">Commentaires : {commentCount}</p>
         </div>
 
         {/* COMMUNAUTÉ */}
