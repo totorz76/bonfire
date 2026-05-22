@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Register() {
   const [email, setEmail] = useState("");
@@ -10,13 +11,13 @@ function Register() {
   const [errors, setErrors] = useState({});
 
   const navigate = useNavigate();
+  const { isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/profile");
+    if (!loading && isAuthenticated) {
+      navigate("/profile", { replace: true });
     }
-  }, [navigate]);
+  }, [loading, isAuthenticated, navigate]);
 
   // 🔐 REGEX PASSWORD
   const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{10,}$/;

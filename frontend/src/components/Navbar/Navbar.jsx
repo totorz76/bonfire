@@ -1,36 +1,15 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { isAdmin } from "../../utils/auth";
+import { useAuth } from "../../context/AuthContext";
 
 export default function Navbar() {
   const navigate = useNavigate();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, isAuthenticated, logout } = useAuth();
   const [open, setOpen] = useState(false);
 
-  const token = localStorage.getItem("token");
-
-  useEffect(() => {
-    if (!token) {
-      setLoading(false);
-      return;
-    }
-
-    fetch("http://localhost:8000/api/me", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        setUser(data);
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, [token]);
-
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
     navigate("/login");
   };
 
@@ -60,7 +39,7 @@ export default function Navbar() {
             Feed
           </Link>
 
-          {token && (
+          {isAuthenticated && (
             <Link
               to="/myposts"
               className="hidden md:block hover:text-[#E25822] transition cursor-pointer"
@@ -69,7 +48,7 @@ export default function Navbar() {
             </Link>
           )}
 
-          {token && isAdmin(user) && (
+          {isAuthenticated && isAdmin(user) && (
             <Link
               to="/admin"
               className="hidden md:block hover:text-[#E25822] transition cursor-pointer"
@@ -80,7 +59,7 @@ export default function Navbar() {
         </div>
 
         <div className="hidden md:flex items-center gap-4 text-sm">
-          {!token ? (
+          {!isAuthenticated ? (
             <>
               <Link className="hover:text-[#E25822] cursor-pointer" to="/login">
                 Login
@@ -99,7 +78,7 @@ export default function Navbar() {
                 to="/profile"
                 className="text-gray-400 hover:text-[#E25822] transition cursor-pointer"
               >
-                👤 {user?.pseudo}
+                👤 {user.pseudo}
               </Link>
 
               <button
@@ -131,13 +110,13 @@ export default function Navbar() {
       >
         <Link
           onClick={() => setOpen(false)}
-          to="/"
+          to="/feed"
           className="hover:text-[#E25822] cursor-pointer"
         >
           Feed
         </Link>
 
-        {token && (
+        {isAuthenticated && (
           <Link
             onClick={() => setOpen(false)}
             to="/myposts"
@@ -147,7 +126,7 @@ export default function Navbar() {
           </Link>
         )}
 
-        {token && isAdmin(user) && (
+        {isAuthenticated && isAdmin(user) && (
           <Link
             onClick={() => setOpen(false)}
             to="/admin"
@@ -157,7 +136,7 @@ export default function Navbar() {
           </Link>
         )}
 
-        {!token ? (
+        {!isAuthenticated ? (
           <>
             <Link
               onClick={() => setOpen(false)}
@@ -180,7 +159,7 @@ export default function Navbar() {
               to="/profile"
               className="text-gray-400 hover:text-[#E25822] transition cursor-pointer"
             >
-              👤 {user?.pseudo}
+              👤 {user.pseudo}
             </Link>
             <button
               onClick={handleLogout}

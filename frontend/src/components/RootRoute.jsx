@@ -1,11 +1,19 @@
-import { Navigate } from "react-router-dom";
 import Home from "../pages/Home/Home";
 import Feed from "../pages/Feed/Feed";
+import { useAuth } from "../context/AuthContext";
 
 const RootRoute = () => {
-  const token = localStorage.getItem("token");
+  const { loading, isAuthenticated } = useAuth();
 
-  return token ? <Feed /> : <Home />;
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-gray-400">
+        Chargement...
+      </div>
+    );
+  }
+
+  return isAuthenticated ? <Feed /> : <Home />;
 };
 
 export default RootRoute;

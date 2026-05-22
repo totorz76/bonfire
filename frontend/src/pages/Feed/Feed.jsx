@@ -3,6 +3,7 @@ import PostsSlider from "./PostsSlider/PostsSlider";
 import { useNavigate } from "react-router-dom";
 import PostsModal from "./PostsModal/PostsModal";
 import PostImage from "../../components/PostImage/PostImage";
+import { useAuth } from "../../context/AuthContext";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -14,7 +15,8 @@ function Feed() {
   const [expandedPosts, setExpandedPosts] = useState({});
   const postsPerPage = 9;
   const navigate = useNavigate();
-  const userId = localStorage.getItem("userId");
+  const { user } = useAuth();
+  const userId = user?.id;
   const [selectedPost, setSelectedPost] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 

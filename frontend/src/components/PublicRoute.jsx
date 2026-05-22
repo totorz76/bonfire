@@ -1,14 +1,21 @@
 import { Navigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function PublicRoute({ children }) {
-  const token = localStorage.getItem("token");
+  const { loading, isAuthenticated } = useAuth();
 
-  // Si connecté → on redirige vers le feed
-  if (token) {
-    return <Navigate to="/" />;
+  if (loading) {
+    return (
+      <div className="flex-1 flex items-center justify-center text-gray-400">
+        Chargement...
+      </div>
+    );
   }
 
-  // Sinon → on affiche la page publique
+  if (isAuthenticated) {
+    return <Navigate to="/feed" replace />;
+  }
+
   return children;
 }
 

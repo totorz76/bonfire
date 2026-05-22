@@ -17,11 +17,13 @@ import ScrollToTop from "./components/ScrollToTop";
 import CGU from "./pages/CGU/CGU";
 import NotFound from "./pages/NotFound/NotFound";
 import Forbidden from "./pages/Forbidden/Forbidden";
+import { AuthProvider } from "./context/AuthContext";
 
 function App() {
   return (
     <div className="bg-[#0A0A0A] min-h-screen text-[#F1F1F1] flex flex-col">
       <BrowserRouter>
+        <AuthProvider>
         <ScrollToTop />
         <Navbar />
         <main className="flex-1 flex flex-col">
@@ -62,6 +64,7 @@ function App() {
           </Routes>
         </main>
         <Footer />
+        </AuthProvider>
       </BrowserRouter>
     </div>
   );

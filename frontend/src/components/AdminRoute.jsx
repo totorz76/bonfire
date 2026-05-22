@@ -1,31 +1,11 @@
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
-import { fetchMe, isAdmin } from "../utils/auth";
+import { isAdmin } from "../utils/auth";
+import { useAuth } from "../context/AuthContext";
 
 export default function AdminRoute({ children }) {
-  const [status, setStatus] = useState("loading");
+  const { user, loading, isAuthenticated } = useAuth();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
-      setStatus("unauthorized");
-      return;
-    }
-
-    fetchMe(token)
-      .then((user) => {
-        if (!user || user.error) {
-          setStatus("unauthorized");
-          return;
-        }
-
-        setStatus(isAdmin(user) ? "allowed" : "forbidden");
-      })
-      .catch(() => setStatus("unauthorized"));
-  }, []);
-
-  if (status === "loading") {
+  if (loading) {
     return (
       <div className="flex-1 flex items-center justify-center text-gray-400">
         Vérification des droits...
@@ -33,11 +13,11 @@ export default function AdminRoute({ children }) {
     );
   }
 
-  if (status === "unauthorized") {
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
 
-  if (status === "forbidden") {
+  if (!isAdmin(user)) {
     return <Navigate to="/acces-refuse" replace />;
   }
 

@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -7,14 +8,13 @@ function Login() {
   const [acceptedCgu, setAcceptedCgu] = useState(false);
   const [cguError, setCguError] = useState(false);
   const navigate = useNavigate();
+  const { login, isAuthenticated, loading } = useAuth();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-
-    if (token) {
-      navigate("/profile");
+    if (!loading && isAuthenticated) {
+      navigate("/profile", { replace: true });
     }
-  }, [navigate]);
+  }, [loading, isAuthenticated, navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -42,10 +42,13 @@ function Login() {
         return;
       }
 
-      // Stocker le token
-      localStorage.setItem("token", data.token);
+      const user = await login(data.token);
 
-      // Redirection
+      if (!user) {
+        alert("Session expirée ou invalide. Reconnectez-vous.");
+        return;
+      }
+
       navigate("/profile");
     } catch (error) {
       console.error(error);
