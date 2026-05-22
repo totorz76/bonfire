@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom";
+import flammeGif from "../../assets/images/Flamme_F.gif";
 
 function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="flex-1 bg-[#0A0A0A] text-[#F1F1F1] flex flex-col justify-between items-center py-10 px-6">
-      <h1 className="text-5xl  text-[#E25822]">BONFIRE</h1>
+    <div className="flex-1 bg-[#0A0A0A] text-[#F1F1F1] flex flex-col items-center justify-center gap-8 sm:gap-10 py-10 px-6">
+      <h1 className="text-5xl sm:text-6xl font-bold text-[#E25822] tracking-wide">
+        BONFIRE
+      </h1>
 
-      <div className="flex-1 flex items-center justify-center">
-        {/* <img
-          src={}
-          alt="Bonfire animation"
-          className="max-w-xs md:max-w-md rounded-xl shadow-lg"
-        /> */}
-      </div>
+      <img
+        src={flammeGif}
+        alt="Animation flamme Bonfire"
+        className="w-24 sm:w-28 md:w-32 h-auto object-contain"
+      />
 
       <div className="w-full max-w-md flex flex-col md:flex-row gap-4 justify-center">
         <button
