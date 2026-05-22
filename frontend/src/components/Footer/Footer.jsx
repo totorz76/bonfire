@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 function Footer() {
   return (
-    <footer className="mt-10 border-t border-[#2A2A2A] bg-[#0F0F0F] text-gray-400">
+    <footer className="flex-shrink-0 border-t border-[#2A2A2A] bg-[#0F0F0F] text-gray-400">
       <div className="max-w-5xl mx-auto px-4 py-6 flex flex-col md:flex-row items-center justify-between gap-4">
         {/* LEFT */}
         <p className="text-sm">© 2026 Bonfire</p>

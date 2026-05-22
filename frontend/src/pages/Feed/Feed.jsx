@@ -87,11 +87,19 @@ function Feed() {
   };
 
   if (loading) {
-    return <div className="text-center mt-10">Chargement...</div>;
+    return (
+      <div className="flex-1 flex items-center justify-center text-gray-400">
+        Chargement...
+      </div>
+    );
   }
 
   if (error) {
-    return <div className="text-center mt-10">{error}</div>;
+    return (
+      <div className="flex-1 flex items-center justify-center text-red-400">
+        {error}
+      </div>
+    );
   }
 
   const sortedPosts = [...posts].sort((a, b) =>
@@ -118,7 +126,7 @@ function Feed() {
     .slice(0, 5);
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F1F1F1] px-6 py-6">
+    <div className="bg-[#0A0A0A] text-[#F1F1F1] px-6 py-6">
       <h1 className="text-3xl font-bold text-[#E25822] mb-8 text-center">
         Feed
       </h1>

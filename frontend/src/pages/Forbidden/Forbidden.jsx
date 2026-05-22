@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 export default function Forbidden() {
   return (
-    <div className="min-h-[70vh] flex flex-col items-center justify-center px-6 text-center">
+    <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
       <p className="text-8xl font-bold text-[#E25822]">403</p>
       <h1 className="text-2xl font-semibold mt-4 mb-2">Accès refusé</h1>
       <p className="text-gray-400 max-w-md mb-8">

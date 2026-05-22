@@ -91,7 +91,7 @@ function Register() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-black text-white">
+    <div className="flex-1 flex items-center justify-center bg-black text-white">
       <form
         onSubmit={handleSubmit}
         className="bg-[#121212] border border-[#2A2A2A] p-8 rounded-2xl w-full max-w-md space-y-4"

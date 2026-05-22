@@ -54,7 +54,7 @@ function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0F0F0F] px-4">
+    <div className="flex-1 flex items-center justify-center bg-[#0F0F0F] px-4">
       <form
         onSubmit={handleLogin}
         className="w-full max-w-sm bg-[#121212] border border-[#2A2A2A] rounded-xl p-6 flex flex-col gap-4 shadow-lg"

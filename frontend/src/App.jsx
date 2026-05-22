@@ -20,11 +20,12 @@ import Forbidden from "./pages/Forbidden/Forbidden";
 
 function App() {
   return (
-    <div className="bg-[#0A0A0A] min-h-screen text-[#F1F1F1]">
+    <div className="bg-[#0A0A0A] min-h-screen text-[#F1F1F1] flex flex-col">
       <BrowserRouter>
-      <ScrollToTop />
+        <ScrollToTop />
         <Navbar />
-        <Routes>
+        <main className="flex-1 flex flex-col">
+          <Routes>
           <Route path="/" element={<RootRoute />} />
           <Route path="/feed" element={<Feed />} />
           <Route path="/createpost" element={<CreatePost />} />
@@ -58,7 +59,8 @@ function App() {
           <Route path="/cgu" element={<CGU />} />
           <Route path="/acces-refuse" element={<Forbidden />} />
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </main>
         <Footer />
       </BrowserRouter>
     </div>

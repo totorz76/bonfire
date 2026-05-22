@@ -4,7 +4,7 @@ function Home() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-[#F1F1F1] flex flex-col justify-between items-center py-10 px-6">
+    <div className="flex-1 bg-[#0A0A0A] text-[#F1F1F1] flex flex-col justify-between items-center py-10 px-6">
       <h1 className="text-5xl  text-[#E25822]">BONFIRE</h1>
 
       <div className="flex-1 flex items-center justify-center">

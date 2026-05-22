@@ -66,7 +66,7 @@ export default function Admin() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400">
+      <div className="flex-1 flex items-center justify-center text-gray-400">
         Chargement du panneau admin...
       </div>
     );
@@ -74,7 +74,7 @@ export default function Admin() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-red-400">
+      <div className="flex-1 flex items-center justify-center text-red-400">
         {error}
       </div>
     );

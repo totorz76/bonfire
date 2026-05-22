@@ -27,7 +27,7 @@ export default function AdminRoute({ children }) {
 
   if (status === "loading") {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-400">
+      <div className="flex-1 flex items-center justify-center text-gray-400">
         Vérification des droits...
       </div>
     );
