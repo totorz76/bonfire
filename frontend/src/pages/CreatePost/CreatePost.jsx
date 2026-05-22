@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PostImage from "../../components/PostImage/PostImage";
 
 function CreatePost() {
   const [title, setTitle] = useState("");
@@ -123,15 +124,14 @@ function CreatePost() {
         {/* PREVIEW */}
         <div className="bg-[#121212] border border-[#2A2A2A] p-4 rounded-xl max-w-full overflow-hidden">
           {preview && file?.type.startsWith("image") && (
-            <img
-              src={preview}
-              alt="preview"
-              className="w-full h-48 object-cover"
-            />
+            <PostImage src={preview} alt="Aperçu" variant="preview" />
           )}
 
           {preview && file?.type.startsWith("video") && (
-            <video controls className="w-full h-48 object-cover">
+            <video
+              controls
+              className="w-full h-48 max-h-48 object-contain bg-[#0A0A0A] rounded-lg"
+            >
               <source src={preview} />
             </video>
           )}

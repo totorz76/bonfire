@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PostsModal from "../Feed/PostsModal/PostsModal";
+import PostImage from "../../components/PostImage/PostImage";
 
 function MyPosts() {
   const [posts, setPosts] = useState([]);
@@ -101,10 +102,9 @@ function MyPosts() {
             >
               {/* IMAGE */}
               {post.image && (
-                <img
+                <PostImage
                   src={`http://localhost:8000${post.image}`}
                   alt={post.title}
-                  className="w-full h-48 object-cover"
                 />
               )}
 

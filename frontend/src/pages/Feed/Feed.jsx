@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import PostsSlider from "./PostsSlider/PostsSlider";
 import { useNavigate } from "react-router-dom";
 import PostsModal from "./PostsModal/PostsModal";
+import PostImage from "../../components/PostImage/PostImage";
 
 function Feed() {
   const [posts, setPosts] = useState([]);
@@ -199,10 +200,9 @@ function Feed() {
                 className="bg-[#121212] border border-[#2A2A2A] rounded-xl overflow-hidden hover:border-[#E25822] transition"
               >
                 {post.image && (
-                  <img
+                  <PostImage
                     src={`http://localhost:8000${post.image}`}
                     alt={post.title}
-                    className="w-full h-48 object-cover"
                   />
                 )}
 
