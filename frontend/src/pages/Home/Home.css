@@ -1,0 +1,45 @@
+.bonfire-flame {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bonfire-glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle,
+    rgba(226, 88, 34, 0.55) 0%,
+    rgba(226, 88, 34, 0.2) 40%,
+    transparent 70%
+  );
+  animation: bonfire-glow-pulse 2.5s ease-in-out infinite;
+}
+
+.bonfire-glow-1 {
+  width: 140%;
+  height: 140%;
+  animation-delay: 0s;
+}
+
+.bonfire-glow-2 {
+  width: 180%;
+  height: 180%;
+  opacity: 0.6;
+  animation-delay: 1.25s;
+  animation-duration: 3s;
+}
+
+@keyframes bonfire-glow-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.92);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.08);
+  }
+}

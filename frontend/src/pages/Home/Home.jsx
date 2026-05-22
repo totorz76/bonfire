@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import flammeGif from "../../assets/images/Flamme_F.gif";
+import "./Home.css";
 
 function Home() {
   const navigate = useNavigate();
@@ -10,11 +11,15 @@ function Home() {
         BONFIRE
       </h1>
 
-      <img
-        src={flammeGif}
-        alt="Animation flamme Bonfire"
-        className="w-24 sm:w-28 md:w-32 h-auto object-contain"
-      />
+      <div className="bonfire-flame">
+        <span className="bonfire-glow bonfire-glow-1" aria-hidden="true" />
+        <span className="bonfire-glow bonfire-glow-2" aria-hidden="true" />
+        <img
+          src={flammeGif}
+          alt="Animation flamme Bonfire"
+          className="relative z-10 w-24 sm:w-28 md:w-32 h-auto object-contain"
+        />
+      </div>
 
       <div className="w-full max-w-md flex flex-col md:flex-row gap-4 justify-center">
         <button
