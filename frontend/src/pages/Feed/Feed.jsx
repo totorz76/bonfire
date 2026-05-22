@@ -124,7 +124,7 @@ function Feed() {
       </h1>
 
       <div className="max-w-3xl mx-auto mb-10">
-        <PostsSlider posts={featuredPosts} />
+        <PostsSlider posts={featuredPosts} onViewPost={openPost} />
       </div>
 
       <div className="flex gap-4 mb-6 justify-center">
@@ -307,8 +307,9 @@ function Feed() {
         >
           Next
         </button>
-        <PostsModal post={selectedPost} onClose={closeModal} />
       </div>
+
+      <PostsModal post={selectedPost} onClose={closeModal} />
     </div>
   );
 }

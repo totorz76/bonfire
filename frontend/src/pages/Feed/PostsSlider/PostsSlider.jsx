@@ -3,10 +3,8 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css";
 import "./PostsSlider.css";
-import { useNavigate } from "react-router-dom";
 
-function PostsSlider({ posts }) {
-  const navigate = useNavigate();
+function PostsSlider({ posts, onViewPost }) {
   return (
     <div className="max-w-3xl mx-auto mb-10 relative px-10">
       <Swiper
@@ -34,7 +32,7 @@ function PostsSlider({ posts }) {
                   : post.description}
               </p>
               <button
-                onClick={() => navigate(`/posts/${post.id}`)}
+                onClick={() => onViewPost(post)}
                 className="mt-4 px-4 py-2 bg-[#E25822] hover:bg-orange-600 transition rounded-lg text-sm font-semibold cursor-pointer"
               >
                 Voir la publication
