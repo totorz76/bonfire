@@ -14,6 +14,7 @@ import Admin from "./pages/Admin/Admin";
 import AdminRoute from "./components/AdminRoute";
 import RootRoute from "./components/RootRoute";
 import ScrollToTop from "./components/ScrollToTop";
+import CGU from "./pages/CGU/CGU";
 
 function App() {
   return (
@@ -52,6 +53,7 @@ function App() {
             }
           />
           <Route path="/register" element={<Register />} />
+          <Route path="/cgu" element={<CGU />} />
         </Routes>
         <Footer />
       </BrowserRouter>
