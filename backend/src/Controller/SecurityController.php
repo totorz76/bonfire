@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Service\TitreService;
 use Doctrine\ORM\EntityManagerInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
+use Symfony\Component\Serializer\SerializerInterface;
 
 #[Route('/api', name: 'api_')]
 class SecurityController extends AbstractController
@@ -99,15 +101,31 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/me', name: 'me', methods: ['GET'])]
-    public function me(#[CurrentUser] ?User $user): JsonResponse
-    {
+    public function me(
+        #[CurrentUser] ?User $user,
+        SerializerInterface $serializer,
+        TitreService $titreService,
+    ): JsonResponse {
         if (!$user) {
             return $this->json(['error' => 'Non authentifié'], 401);
         }
 
-        return $this->json($user, 200, [], [
-            'groups' => ['user:read']
-        ]);
+        $level = $user->getLevel();
+        $data = json_decode(
+            $serializer->serialize($user, 'json', ['groups' => ['user:read']]),
+            true,
+            512,
+            JSON_THROW_ON_ERROR
+        );
+
+        $data['currentTitle'] = $titreService->formatTitre(
+            $titreService->getCurrentTitle($level)
+        );
+        $data['nextTitle'] = $titreService->formatTitre(
+            $titreService->getNextTitle($level)
+        );
+
+        return $this->json($data);
     }
 
     #[Route('/logout', name: 'logout', methods: ['POST'])]

@@ -111,22 +111,8 @@ export default function Profile() {
 
   const level = user.level;
   const xpProgress = user.xpProgress;
-  const getTitleFromLevel = (level) => {
-    if (level >= 20) return "Légende";
-    if (level >= 15) return "Maître";
-    if (level >= 10) return "Guerrier";
-    if (level >= 5) return "Aventurier";
-    return "Débutant";
-  };
-  const getNextTitle = (level) => {
-    if (level < 5) return { title: "Aventurier", level: 5 };
-    if (level < 10) return { title: "Guerrier", level: 10 };
-    if (level < 15) return { title: "Maître", level: 15 };
-    if (level < 20) return { title: "Légende", level: 20 };
-
-    return null; // max atteint
-  };
-  const nextTitle = getNextTitle(level);
+  const currentTitleName = user.currentTitle?.nom ?? "—";
+  const nextTitle = user.nextTitle;
 
   return (
     <div className="max-w-6xl mx-auto p-6 grid grid-cols-1 md:grid-cols-3 gap-6 text-white">
@@ -160,7 +146,7 @@ export default function Profile() {
 
           {/* TITRE RPG */}
           <span className="text-xs bg-[#1a1a1a] border border-[#2A2A2A] px-3 py-1 rounded-full text-gray-300">
-            {getTitleFromLevel(level)}
+            {currentTitleName}
           </span>
         </div>
 
@@ -191,7 +177,7 @@ export default function Profile() {
           <div>
             <span className="text-gray-400">Titre:</span>
             <span className="ml-2 text-[#E25822]">
-              {getTitleFromLevel(level)}
+              {currentTitleName}
             </span>
           </div>
         </div>
@@ -248,8 +234,8 @@ export default function Profile() {
           {nextTitle ? (
             <p className="text-sm text-gray-400">
               Prochain titre :{" "}
-              <span className="text-[#E25822]">{nextTitle.title}</span> (niveau{" "}
-              {nextTitle.level})
+              <span className="text-[#E25822]">{nextTitle.nom}</span> (niveau{" "}
+              {nextTitle.niveau_min})
             </p>
           ) : (
             <p className="text-sm text-yellow-400">🎉 Niveau max atteint</p>

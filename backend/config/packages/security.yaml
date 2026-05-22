@@ -36,6 +36,7 @@ security:
         - { path: ^/api/register, roles: PUBLIC_ACCESS }
         - { path: ^/api/comments, methods: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/posts, methods: GET, roles: PUBLIC_ACCESS }
+        - { path: ^/api/titres, methods: GET, roles: PUBLIC_ACCESS }
         - { path: ^/api/posts, methods: [POST], roles: IS_AUTHENTICATED_FULLY }
         - { path: ^/api/admin, roles: ROLE_ADMIN }
         - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
