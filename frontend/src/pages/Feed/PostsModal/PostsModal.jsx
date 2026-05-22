@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import PostImage from "../../../components/PostImage/PostImage";
+import PostMedia from "../../../components/PostMedia/PostMedia";
 
 function PostsModal({ post, onClose }) {
   const [newComment, setNewComment] = useState("");
@@ -77,14 +77,7 @@ function PostsModal({ post, onClose }) {
 
         {/* TOP (POST FIXE) */}
         <div className="flex-shrink-0 p-6 pb-3">
-          {post.image && (
-            <PostImage
-              src={`http://localhost:8000${post.image}`}
-              alt={post.title}
-              variant="modal"
-              className="rounded-lg mb-4"
-            />
-          )}
+          <PostMedia post={post} variant="modal" className="rounded-lg mb-4" />
 
           <h2 className="text-xl font-bold text-[#E25822] mb-2">
             {post.title}

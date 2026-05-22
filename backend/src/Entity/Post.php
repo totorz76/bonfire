@@ -53,6 +53,10 @@ class Post
     #[Groups(['post:read', 'post:write'])]
     private ?string $image = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['post:read'])]
+    private ?string $youtube_url = null;
+
     #[ORM\Column]
     #[Groups(['post:read'])]
     private ?\DateTimeImmutable $created_at = null;
@@ -112,6 +116,17 @@ class Post
     public function setImage(?string $image): static
     {
         $this->image = $image;
+        return $this;
+    }
+
+    public function getYoutubeUrl(): ?string
+    {
+        return $this->youtube_url;
+    }
+
+    public function setYoutubeUrl(?string $youtube_url): static
+    {
+        $this->youtube_url = $youtube_url;
         return $this;
     }
 

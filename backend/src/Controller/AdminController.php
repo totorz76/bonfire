@@ -59,6 +59,7 @@ class AdminController extends AbstractController
             'id' => $post->getId(),
             'title' => $post->getTitle(),
             'description' => $post->getDescription(),
+            'youtube_url' => $post->getYoutubeUrl(),
             'created_at' => $post->getCreatedAt()?->format(\DateTimeInterface::ATOM),
             'user' => [
                 'id' => $post->getUser()?->getId(),

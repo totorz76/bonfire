@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import PostsModal from "../Feed/PostsModal/PostsModal";
-import PostImage from "../../components/PostImage/PostImage";
+import PostMedia from "../../components/PostMedia/PostMedia";
 
 function MyPosts() {
   const [posts, setPosts] = useState([]);
@@ -101,12 +101,7 @@ function MyPosts() {
               className="bg-[#121212] border border-[#2A2A2A] rounded-xl overflow-hidden hover:border-[#E25822] transition"
             >
               {/* IMAGE */}
-              {post.image && (
-                <PostImage
-                  src={`http://localhost:8000${post.image}`}
-                  alt={post.title}
-                />
-              )}
+              <PostMedia post={post} />
 
               {/* CONTENT */}
               <div className="p-4 space-y-3">

@@ -3,7 +3,7 @@ import { Navigation, Autoplay } from "swiper/modules";
 import "swiper/css/navigation";
 import "swiper/css";
 import "./PostsSlider.css";
-import PostImage from "../../../components/PostImage/PostImage";
+import PostMedia from "../../../components/PostMedia/PostMedia";
 
 function PostsSlider({ posts, onViewPost }) {
   return (
@@ -19,13 +19,7 @@ function PostsSlider({ posts, onViewPost }) {
         {posts.map((post) => (
           <SwiperSlide key={post.id}>
             <div className="bg-[#121212] border border-[#2A2A2A] p-6 rounded-xl text-center max-w-3xl mx-auto mb-10 px-8">
-              {post.image && (
-                <PostImage
-                  src={`http://localhost:8000${post.image}`}
-                  alt={post.title}
-                  className="rounded-lg mb-4"
-                />
-              )}
+              <PostMedia post={post} className="rounded-lg mb-4" />
               <h2 className="text-xl font-bold text-[#E25822]">{post.title}</h2>
               <p className="text-gray-300 mt-2">
                 {post.description.length > 120

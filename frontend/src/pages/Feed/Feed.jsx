@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import PostsSlider from "./PostsSlider/PostsSlider";
 import { useNavigate } from "react-router-dom";
 import PostsModal from "./PostsModal/PostsModal";
-import PostImage from "../../components/PostImage/PostImage";
+import PostMedia from "../../components/PostMedia/PostMedia";
 import { useAuth } from "../../context/AuthContext";
 
 function Feed() {
@@ -201,12 +201,7 @@ function Feed() {
                 key={post.id}
                 className="bg-[#121212] border border-[#2A2A2A] rounded-xl overflow-hidden hover:border-[#E25822] transition"
               >
-                {post.image && (
-                  <PostImage
-                    src={`http://localhost:8000${post.image}`}
-                    alt={post.title}
-                  />
-                )}
+                <PostMedia post={post} />
 
                 <div className="p-4">
                   <h2 className="text-[#E25822] font-semibold mb-2">
