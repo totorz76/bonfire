@@ -15,6 +15,8 @@ import AdminRoute from "./components/AdminRoute";
 import RootRoute from "./components/RootRoute";
 import ScrollToTop from "./components/ScrollToTop";
 import CGU from "./pages/CGU/CGU";
+import NotFound from "./pages/NotFound/NotFound";
+import Forbidden from "./pages/Forbidden/Forbidden";
 
 function App() {
   return (
@@ -54,6 +56,8 @@ function App() {
           />
           <Route path="/register" element={<Register />} />
           <Route path="/cgu" element={<CGU />} />
+          <Route path="/acces-refuse" element={<Forbidden />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
         <Footer />
       </BrowserRouter>
