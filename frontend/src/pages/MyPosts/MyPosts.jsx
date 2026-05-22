@@ -61,12 +61,14 @@ function MyPosts() {
     : [];
 
   return (
-    <div className="max-w-6xl mx-auto p-6 text-white">
+    <div className="w-full max-w-6xl mx-auto p-6 text-white">
       {/* HEADER */}
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#E25822]">Mes posts</h1>
+      <div className="flex w-full flex-col gap-4 sm:flex-row sm:items-center sm:justify-between mb-6">
+        <h1 className="text-2xl font-bold text-[#E25822] shrink-0">
+          Mes posts
+        </h1>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 self-end sm:ml-auto">
           <select
             value={sortOrder}
             onChange={(e) => setSortOrder(e.target.value)}
