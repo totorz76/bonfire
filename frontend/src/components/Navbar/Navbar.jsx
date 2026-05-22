@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { isAdmin } from "../../utils/auth";
 
 export default function Navbar() {
   const navigate = useNavigate();
@@ -65,6 +66,15 @@ export default function Navbar() {
               className="hidden md:block hover:text-[#E25822] transition cursor-pointer"
             >
               My posts
+            </Link>
+          )}
+
+          {token && isAdmin(user) && (
+            <Link
+              to="/admin"
+              className="hidden md:block hover:text-[#E25822] transition cursor-pointer"
+            >
+              Admin
             </Link>
           )}
         </div>
@@ -134,6 +144,16 @@ export default function Navbar() {
             className="hover:text-[#E25822] cursor-pointer"
           >
             My posts
+          </Link>
+        )}
+
+        {token && isAdmin(user) && (
+          <Link
+            onClick={() => setOpen(false)}
+            to="/admin"
+            className="hover:text-[#E25822] cursor-pointer"
+          >
+            Admin
           </Link>
         )}
 

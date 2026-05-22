@@ -147,6 +147,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return (string) $this->email;
     }
 
+    #[Groups(['user:read'])]
     public function getRoles(): array
     {
         $roles = $this->roles;

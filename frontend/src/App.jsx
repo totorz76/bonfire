@@ -10,6 +10,8 @@ import PublicRoute from "./components/PublicRoute";
 import Footer from "./components/Footer/Footer";
 import MyPosts from "./pages/MyPosts/MyPosts";
 import CreatePost from "./pages/CreatePost/CreatePost";
+import Admin from "./pages/Admin/Admin";
+import AdminRoute from "./components/AdminRoute";
 import RootRoute from "./components/RootRoute";
 import ScrollToTop from "./components/ScrollToTop";
 
@@ -39,6 +41,14 @@ function App() {
               <PrivateRoute>
                 <Profile />
               </PrivateRoute>
+            }
+          />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
             }
           />
           <Route path="/register" element={<Register />} />
