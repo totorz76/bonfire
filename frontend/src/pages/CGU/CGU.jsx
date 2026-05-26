@@ -113,10 +113,10 @@ export default function CGU() {
       </div>
 
       <Link
-        to="/login"
+        to="/register"
         className="inline-block mt-10 text-[#E25822] hover:underline text-sm"
       >
-        ← Retour à la connexion
+        ← Retour à l'inscription
       </Link>
     </div>
   );

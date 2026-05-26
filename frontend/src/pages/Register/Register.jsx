@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 function Register() {
@@ -7,6 +7,7 @@ function Register() {
   const [pseudo, setPseudo] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [acceptedCgu, setAcceptedCgu] = useState(false);
 
   const [errors, setErrors] = useState({});
 
@@ -43,6 +44,10 @@ function Register() {
       newErrors.confirmPassword = "Confirmation requise";
     } else if (password !== confirmPassword) {
       newErrors.confirmPassword = "Les mots de passe ne correspondent pas";
+    }
+
+    if (!acceptedCgu) {
+      newErrors.cgu = "Vous devez accepter les CGU pour créer un compte";
     }
 
     return newErrors;
@@ -169,6 +174,34 @@ function Register() {
             <li>Un chiffre</li>
           </ul>
         </div>
+
+        <label className="flex items-start gap-2 text-sm text-gray-400 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={acceptedCgu}
+            onChange={(e) => {
+              setAcceptedCgu(e.target.checked);
+              if (e.target.checked) {
+                setErrors((prev) => ({ ...prev, cgu: undefined }));
+              }
+            }}
+            className="mt-1 accent-[#E25822] cursor-pointer"
+          />
+          <span>
+            J'accepte les{" "}
+            <Link
+              to="/cgu"
+              className="text-[#E25822] hover:underline"
+              onClick={(e) => e.stopPropagation()}
+            >
+              conditions générales d'utilisation
+            </Link>
+          </span>
+        </label>
+
+        {errors.cgu && (
+          <p className="text-red-500 text-sm -mt-2">{errors.cgu}</p>
+        )}
 
         {/* GLOBAL ERROR */}
         {errors.global && (

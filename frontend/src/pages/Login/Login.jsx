@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [acceptedCgu, setAcceptedCgu] = useState(false);
-  const [cguError, setCguError] = useState(false);
   const navigate = useNavigate();
   const { login, isAuthenticated, loading } = useAuth();
 
@@ -18,13 +16,6 @@ function Login() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    if (!acceptedCgu) {
-      setCguError(true);
-      return;
-    }
-
-    setCguError(false);
 
     try {
       const response = await fetch("http://localhost:8000/api/login", {
@@ -79,34 +70,6 @@ function Login() {
           onChange={(e) => setPassword(e.target.value)}
           className="w-full px-3 py-2 rounded-lg bg-[#0F0F0F] border border-[#2A2A2A] text-white focus:outline-none focus:border-[#E25822]"
         />
-
-        <label className="flex items-start gap-2 text-sm text-gray-400 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={acceptedCgu}
-            onChange={(e) => {
-              setAcceptedCgu(e.target.checked);
-              if (e.target.checked) setCguError(false);
-            }}
-            className="mt-1 accent-[#E25822] cursor-pointer"
-          />
-          <span>
-            J'accepte les{" "}
-            <Link
-              to="/cgu"
-              className="text-[#E25822] hover:underline"
-              onClick={(e) => e.stopPropagation()}
-            >
-              conditions générales d'utilisation
-            </Link>
-          </span>
-        </label>
-
-        {cguError && (
-          <p className="text-red-500 text-sm -mt-2">
-            Vous devez accepter les CGU pour vous connecter.
-          </p>
-        )}
 
         <button
           type="submit"
