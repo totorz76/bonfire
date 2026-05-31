@@ -33,7 +33,11 @@ class CommentListener
             $postOwner->addXp(1);
         }
 
-        // IMPORTANT : flush explicite
+        $this->em->persist($commenter);
+        if ($postOwner && $postOwner !== $commenter) {
+            $this->em->persist($postOwner);
+        }
+
         $this->em->flush();
     }
 }

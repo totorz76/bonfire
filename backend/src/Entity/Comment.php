@@ -3,7 +3,10 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post as PostOperation;
 use App\Repository\CommentRepository;
+use App\State\CommentProcessor;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Attribute\Groups;
@@ -12,6 +15,13 @@ use ApiPlatform\Metadata\ApiFilter;
 
 #[ApiFilter(SearchFilter::class, properties: ['post' => 'exact'])]
 #[ApiResource(
+    operations: [
+        new GetCollection(),
+        new PostOperation(
+            security: "is_granted('ROLE_USER')",
+            processor: CommentProcessor::class,
+        ),
+    ],
     normalizationContext: ['groups' => ['comment:read']],
     denormalizationContext: ['groups' => ['comment:write']]
 )]
@@ -32,10 +42,12 @@ class Comment
     private ?\DateTimeImmutable $created_at = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
-    #[Groups(['comment:read', 'comment:write'])]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['comment:read'])]
     private ?User $user = null;
 
     #[ORM\ManyToOne(inversedBy: 'comments')]
+    #[ORM\JoinColumn(nullable: false)]
     #[Groups(['comment:read', 'comment:write'])]
     private ?Post $post = null;
 
