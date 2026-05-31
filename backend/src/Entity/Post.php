@@ -152,6 +152,12 @@ class Post
         return $this;
     }
 
+    #[Groups(['post:read'])]
+    public function getAuthorId(): ?int
+    {
+        return $this->user?->getId();
+    }
+
     public function getComments(): Collection
     {
         return $this->comments;

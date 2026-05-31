@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Feed from "./pages/Feed/Feed";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
-import Profile from "./pages/Profile/profile";
+import ProfilePage from "./pages/Profile/ProfilePage";
 import PrivateRoute from "./components/PrivateRoute";
 import Navbar from "./components/Navbar/Navbar";
 import Home from "./pages/Home/Home";
@@ -42,10 +42,18 @@ function App() {
             }
           />
           <Route
+            path="/profile/:userId"
+            element={
+              <PrivateRoute>
+                <ProfilePage />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/profile"
             element={
               <PrivateRoute>
-                <Profile />
+                <ProfilePage />
               </PrivateRoute>
             }
           />

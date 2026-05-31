@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import PostMedia from "../../../components/PostMedia/PostMedia";
+import AuthorLink from "../../../components/AuthorLink/AuthorLink";
 
 function PostsModal({ post, onClose }) {
   const [newComment, setNewComment] = useState("");
@@ -85,7 +86,9 @@ function PostsModal({ post, onClose }) {
 
           <p className="text-gray-300 mb-2">{post.description}</p>
 
-          <div className="text-sm text-gray-500">{post.user?.pseudo}</div>
+          <div className="text-sm text-gray-500">
+            <AuthorLink user={post.user} userId={post.authorId} />
+          </div>
         </div>
 
         {/* COMMENTS AREA (FULL CONTROL HEIGHT) */}

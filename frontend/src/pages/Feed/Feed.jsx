@@ -3,6 +3,7 @@ import PostsSlider from "./PostsSlider/PostsSlider";
 import { useNavigate } from "react-router-dom";
 import PostsModal from "./PostsModal/PostsModal";
 import PostMedia from "../../components/PostMedia/PostMedia";
+import AuthorLink from "../../components/AuthorLink/AuthorLink";
 import { useAuth } from "../../context/AuthContext";
 
 function Feed() {
@@ -228,7 +229,7 @@ function Feed() {
                   )}
 
                   <div className="text-sm text-gray-500 mb-2">
-                    {post.user?.pseudo}
+                    <AuthorLink user={post.user} userId={post.authorId} />
                   </div>
 
                   {/* 🔥 NOUVEAU LAYOUT PROPRE */}

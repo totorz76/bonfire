@@ -3,8 +3,10 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Service\TitreService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,6 +15,38 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
+    #[Route('/api/users/{id}/profile', methods: ['GET'])]
+    public function profile(
+        User $user,
+        TitreService $titreService,
+        Security $security,
+    ): JsonResponse {
+        $currentUser = $security->getUser();
+        $level = $user->getLevel();
+        $isOwnProfile = $currentUser instanceof User && $currentUser->getId() === $user->getId();
+
+        $data = [
+            'id' => $user->getId(),
+            'pseudo' => $user->getPseudo(),
+            'bio' => $user->getBio(),
+            'avatar' => $user->getAvatar(),
+            'level' => $level,
+            'xpProgress' => $user->getXpProgress(),
+            'followersCount' => $user->getFollowers()->count(),
+            'followingCount' => $user->getFollowing()->count(),
+            'currentTitle' => $titreService->formatTitre($titreService->getCurrentTitle($level)),
+            'nextTitle' => $titreService->formatTitre($titreService->getNextTitle($level)),
+            'isFollowing' => $currentUser instanceof User && $currentUser->isFollowing($user),
+            'isOwnProfile' => $isOwnProfile,
+        ];
+
+        if ($isOwnProfile && $currentUser instanceof User) {
+            $data['email'] = $currentUser->getEmail();
+        }
+
+        return $this->json($data);
+    }
+
     #[Route('/api/me', methods: ['PATCH'])]
     public function updateMe(Request $request, EntityManagerInterface $em): JsonResponse
     {
